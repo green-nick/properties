@@ -62,13 +62,13 @@ class SubscriptionsTests {
         assert(subscription.subscribed)
 
         val value1 = 10
-        property.set(value1)
+        property.value = value1
         assert(listener == value1)
         assert(subscription.subscribed)
 
         subscription.unsubscribe()
         val value2 = 20
-        property.set(value2)
+        property.value = value2
         assert(listener == value1)
         assert(!subscription.subscribed)
     }
