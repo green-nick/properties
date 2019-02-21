@@ -1,20 +1,19 @@
 package com.github.greennick.properties
 
-internal class PropertyImpl<T>(private var value: T) : MutableProperty<T> {
+internal class PropertyImpl<T>(initValue: T) : MutableProperty<T> {
     private val listeners = linkedSetOf<(T) -> Unit>()
 
-    override fun get() = value
+    override var value: T = initValue
+        set(value) {
+            if (value == field) return
+            field = value
+            listeners.forEach { it(value) }
+        }
 
     override fun subscribe(onChanged: (T) -> Unit): ListenableSubscription {
         listeners += onChanged
         onChanged(value)
         return SubscriptionImpl(this, onChanged)
-    }
-
-    override fun set(new: T) {
-        if (new == value) return
-        value = new
-        listeners.forEach { it(value) }
     }
 
     override fun toString() = "Property of [$value]"

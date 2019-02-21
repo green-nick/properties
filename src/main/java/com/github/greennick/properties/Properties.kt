@@ -3,13 +3,13 @@
 package com.github.greennick.properties
 
 interface Property<T> {
-    fun get(): T
+    val value: T
 
     fun subscribe(onChanged: (T) -> Unit): ListenableSubscription
 }
 
 interface MutableProperty<T> : Property<T> {
-    fun set(new: T)
+    override var value: T
 }
 
 fun <T> propertyOf(value: T): MutableProperty<T> = PropertyImpl(value)
