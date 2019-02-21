@@ -9,16 +9,16 @@ class PropertiesTests {
         val init = 1
         val property = propertyOf(init)
 
-        assert(property.get() == init)
+        assert(property.value == init)
     }
 
     @Test
     fun `getting changed value`() {
         val changed = 2
         val property = propertyOf(0)
-        property.set(changed)
+        property.value = changed
 
-        assert(property.get() == changed)
+        assert(property.value == changed)
     }
 
     @Test
@@ -40,11 +40,11 @@ class PropertiesTests {
         assert(listener == init)
 
         val first = 10
-        property.set(first)
+        property.value = first
         assert(listener == first)
 
         val second = 20
-        property.set(second)
+        property.value = second
         assert(listener == second)
     }
 
@@ -61,12 +61,12 @@ class PropertiesTests {
 
 
         val first = 10
-        property.set(first)
+        property.value = first
         assert(listener1 == first)
         assert(listener2 == first)
 
         val second = 20
-        property.set(second)
+        property.value = second
         assert(listener1 == second)
         assert(listener2 == second)
     }
@@ -77,7 +77,7 @@ class PropertiesTests {
         val init = 1
         val property = propertyOf(init)
         property.subscribe { counter++ }
-        property.set(init)
+        property.value = init
 
         assert(counter == 1)
     }
