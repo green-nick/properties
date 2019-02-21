@@ -32,7 +32,7 @@ class CompositeSubscriptionTest {
         composite.unsubscribe()
 
         val newValue = 10
-        property.set(newValue)
+        property.value = newValue
 
         assert(listener1 == init)
         assert(listener2 == init)
