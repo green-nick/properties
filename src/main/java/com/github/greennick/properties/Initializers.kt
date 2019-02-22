@@ -13,7 +13,7 @@ import com.github.greennick.properties.primitives.longs.MutableLongProperty
 
 fun <T> propertyOf(value: T): MutableProperty<T> = PropertyImpl(value)
 
-fun <T> emptyProperty(): MutableProperty<T?> = PropertyImpl(null)
+fun <T> emptyProperty(value: T? = null): MutableProperty<T?> = PropertyImpl(value)
 
 fun propertyOf(value: Int): MutableIntProperty = IntPropertyImpl(value)
 
