@@ -2,7 +2,7 @@ package com.github.greennick.properties.primitives.doubles
 
 import com.github.greennick.properties.subscriptions.ListenableSubscription
 
-class DoublePropertyImpl(initValue: Double): MutableDoubleProperty {
+class DoublePropertyImpl(initValue: Double) : MutableDoubleProperty {
     private val listeners = linkedSetOf<(Double) -> Unit>()
 
     override var value: Double = initValue
@@ -17,6 +17,8 @@ class DoublePropertyImpl(initValue: Double): MutableDoubleProperty {
         onChanged(value)
         return SubscriptionImpl(this, onChanged)
     }
+
+    override fun toString() = "Property of [$value]"
 
     private class SubscriptionImpl(
         private val propertyImpl: DoublePropertyImpl,

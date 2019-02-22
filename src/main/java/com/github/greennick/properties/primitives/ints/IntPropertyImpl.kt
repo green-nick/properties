@@ -2,7 +2,7 @@ package com.github.greennick.properties.primitives.ints
 
 import com.github.greennick.properties.subscriptions.ListenableSubscription
 
-internal class IntPropertyImpl(initValue: Int): MutableIntProperty {
+internal class IntPropertyImpl(initValue: Int) : MutableIntProperty {
     private val listeners = linkedSetOf<(Int) -> Unit>()
 
     override var value: Int = initValue
@@ -18,6 +18,7 @@ internal class IntPropertyImpl(initValue: Int): MutableIntProperty {
         return SubscriptionImpl(this, onChanged)
     }
 
+    override fun toString() = "Property of [$value]"
 
     private class SubscriptionImpl(
         private val propertyImpl: IntPropertyImpl,
