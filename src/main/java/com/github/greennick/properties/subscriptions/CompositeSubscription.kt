@@ -1,12 +1,10 @@
-@file:Suppress("unused")
-
-package com.github.greennick.properties
+package com.github.greennick.properties.subscriptions
 
 class CompositeSubscription : Subscription {
     private val subscriptions = mutableListOf<Subscription>()
     private var _subscribed = true
 
-    override val subscribed: Boolean get() = _subscribed
+    override val subscribed get() = _subscribed
 
     override fun unsubscribe() {
         if (!_subscribed) return
