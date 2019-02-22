@@ -1,4 +1,6 @@
-package com.github.greennick.properties
+package com.github.greennick.properties.generic
+
+import com.github.greennick.properties.subscriptions.ListenableSubscription
 
 internal class PropertyImpl<T>(initValue: T) : MutableProperty<T> {
     private val listeners = linkedSetOf<(T) -> Unit>()

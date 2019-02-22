@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package com.github.greennick.properties
+package com.github.greennick.properties.subscriptions
 
 class CompositeSubscription : Subscription {
     private val subscriptions = mutableListOf<Subscription>()

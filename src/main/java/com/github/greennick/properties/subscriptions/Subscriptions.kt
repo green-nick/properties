@@ -1,4 +1,4 @@
-package com.github.greennick.properties
+package com.github.greennick.properties.subscriptions
 
 interface Subscription {
     val subscribed: Boolean

@@ -1,5 +1,6 @@
-package com.github.greennick.properties
+package com.github.greennick.properties.generic
 
+import com.github.greennick.properties.propertyOf
 import org.junit.Test
 
 class PropertiesTests {

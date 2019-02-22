@@ -1,5 +1,7 @@
 package com.github.greennick.properties
 
+import com.github.greennick.properties.generic.MutableProperty
+import com.github.greennick.properties.generic.PropertyImpl
 import com.github.greennick.properties.primitives.doubles.DoublePropertyImpl
 import com.github.greennick.properties.primitives.doubles.MutableDoubleProperty
 import com.github.greennick.properties.primitives.ints.IntPropertyImpl

@@ -1,6 +1,6 @@
 package com.github.greennick.properties.primitives.ints
 
-import com.github.greennick.properties.ListenableSubscription
+import com.github.greennick.properties.subscriptions.ListenableSubscription
 
 interface IntProperty {
     val value: Int

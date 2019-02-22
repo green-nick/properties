@@ -1,6 +1,6 @@
 package com.github.greennick.properties.primitives.ints
 
-import com.github.greennick.properties.ListenableSubscription
+import com.github.greennick.properties.subscriptions.ListenableSubscription
 
 internal class IntPropertyImpl(initValue: Int): MutableIntProperty {
     private val listeners = linkedSetOf<(Int) -> Unit>()

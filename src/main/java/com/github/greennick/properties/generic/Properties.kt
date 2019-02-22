@@ -1,4 +1,6 @@
-package com.github.greennick.properties
+package com.github.greennick.properties.generic
+
+import com.github.greennick.properties.subscriptions.ListenableSubscription
 
 interface Property<T> {
     val value: T
