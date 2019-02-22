@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package com.github.greennick.properties
 
 interface Subscription {
