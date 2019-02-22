@@ -18,7 +18,7 @@ repositories {
 **Step 2.** Add the dependency
 ```
 dependencies {
-    implementation 'com.github.green-nick:properties:1.0'
+    implementation 'com.github.green-nick:properties:{latest version}'
 }
 ```
 ## Usage examples:
