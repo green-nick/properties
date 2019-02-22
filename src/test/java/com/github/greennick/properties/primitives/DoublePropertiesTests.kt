@@ -6,6 +6,16 @@ import org.junit.Test
 class DoublePropertiesTests {
 
     @Test
+    fun `assure value is not boxed`() {
+        val property = propertyOf(0.343)
+
+        val firstBoxed: Double? = property.value
+        val secondBoxed: Double? = property.value
+
+        assert(!(firstBoxed === secondBoxed))
+    }
+
+    @Test
     fun `toString has correct output`() {
         val init = 10.0
         val toString = propertyOf(init).toString()

@@ -6,6 +6,16 @@ import org.junit.Test
 class IntPropertiesTests {
 
     @Test
+    fun `assure value is not boxed`() {
+        val property = propertyOf(10000)
+
+        val firstBoxed: Int? = property.value
+        val secondBoxed: Int? = property.value
+
+        assert(!(firstBoxed === secondBoxed))
+    }
+
+    @Test
     fun `toString has correct output`() {
         val init = 10
         val toString = propertyOf(init).toString()
