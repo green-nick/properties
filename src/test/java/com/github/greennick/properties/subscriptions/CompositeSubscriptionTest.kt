@@ -12,7 +12,7 @@ class CompositeSubscriptionTest {
     }
 
     @Test
-    fun `empty composite unsubscribing`() {
+    fun `empty composite unsubscribe`() {
         val composite = CompositeSubscription()
         assert(composite.subscribed)
         composite.unsubscribe()
@@ -23,16 +23,16 @@ class CompositeSubscriptionTest {
     fun `unsubscribe composite with active subscriptions`() {
         val composite = CompositeSubscription()
 
-        var listener1 = 0
-        var listener2 = 0
-        val init = 1
+        var listener1 = ""
+        var listener2 = ""
+        val init = "Hello"
         val property = propertyOf(init)
         val subscription1 = property.subscribe { listener1 = it }
         val subscription2 = property.subscribe { listener2 = it }
         composite.add(subscription1, subscription2)
         composite.unsubscribe()
 
-        val newValue = 10
+        val newValue = "world"
         property.value = newValue
 
         assert(listener1 == init)

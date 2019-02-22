@@ -7,7 +7,7 @@ class SubscriptionsTests {
 
     @Test
     fun `check if subscription is active`() {
-        val property = propertyOf(1)
+        val property = propertyOf("Hello")
         val subscription = property.subscribe(::println)
 
         assert(subscription.subscribed)
@@ -15,7 +15,7 @@ class SubscriptionsTests {
 
     @Test
     fun `check if few subscriptions is active`() {
-        val property = propertyOf(1)
+        val property = propertyOf("Hello")
         val subscription1 = property.subscribe(::println)
         val subscription2 = property.subscribe(::print)
 
@@ -25,7 +25,7 @@ class SubscriptionsTests {
 
     @Test
     fun `unsubscribe subscription`() {
-        val property = propertyOf(1)
+        val property = propertyOf("Hello")
         val subscription = property.subscribe(::println)
         assert(subscription.subscribed)
 
@@ -36,7 +36,7 @@ class SubscriptionsTests {
 
     @Test
     fun `mix of subscribed and unsubscribed subscriptions`() {
-        val property = propertyOf(1)
+        val property = propertyOf("Hello")
         val subscription1 = property.subscribe(::println)
         val subscription2 = property.subscribe(::print)
 
@@ -54,21 +54,21 @@ class SubscriptionsTests {
 
     @Test
     fun `listen for changes then unsubscribe`() {
-        var listener = 0
-        val init = 1
+        var listener = ""
+        val init = "Hello"
         val property = propertyOf(init)
         val subscription = property.subscribe { listener = it }
 
         assert(listener == init)
         assert(subscription.subscribed)
 
-        val value1 = 10
+        val value1 = "world"
         property.value = value1
         assert(listener == value1)
         assert(subscription.subscribed)
 
         subscription.unsubscribe()
-        val value2 = 20
+        val value2 = "!!!"
         property.value = value2
         assert(listener == value1)
         assert(!subscription.subscribed)
@@ -76,24 +76,24 @@ class SubscriptionsTests {
 
     @Test
     fun `listen for unsubscribed event`() {
-        var unsubscibed = false
-        val property = propertyOf(1)
+        var unsubscribed = false
+        val property = propertyOf("Hello")
         val subscription = property.subscribe(::println)
 
-        subscription.onUnsubscribe { unsubscibed = true }
+        subscription.onUnsubscribe { unsubscribed = true }
 
         assert(subscription.subscribed)
-        assert(!unsubscibed)
+        assert(!unsubscribed)
 
         subscription.unsubscribe()
         assert(!subscription.subscribed)
-        assert(unsubscibed)
+        assert(unsubscribed)
     }
 
     @Test
     fun `unsubscribed event calls once`() {
         var counter = 0
-        val property = propertyOf(1)
+        val property = propertyOf("Hello")
         val subscription = property.subscribe(::println)
         subscription.onUnsubscribe { counter++ }
 
