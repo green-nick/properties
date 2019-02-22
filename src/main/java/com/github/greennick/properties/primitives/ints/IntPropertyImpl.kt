@@ -1,16 +1,18 @@
-package com.github.greennick.properties
+package com.github.greennick.properties.primitives.ints
 
-internal class PropertyImpl<T>(initValue: T) : MutableProperty<T> {
-    private val listeners = linkedSetOf<(T) -> Unit>()
+import com.github.greennick.properties.subscriptions.ListenableSubscription
 
-    override var value: T = initValue
+internal class IntPropertyImpl(initValue: Int) : MutableIntProperty {
+    private val listeners = linkedSetOf<(Int) -> Unit>()
+
+    override var value = initValue
         set(value) {
             if (value == field) return
             field = value
             listeners.forEach { it(value) }
         }
 
-    override fun subscribe(onChanged: (T) -> Unit): ListenableSubscription {
+    override fun subscribe(onChanged: (Int) -> Unit): ListenableSubscription {
         listeners += onChanged
         onChanged(value)
         return SubscriptionImpl(this, onChanged)
@@ -18,16 +20,13 @@ internal class PropertyImpl<T>(initValue: T) : MutableProperty<T> {
 
     override fun toString() = "Property of [$value]"
 
-    private class SubscriptionImpl<T>(
-        private val propertyImpl: PropertyImpl<T>,
-        private val action: (T) -> Unit
+    private class SubscriptionImpl(
+        private val propertyImpl: IntPropertyImpl,
+        private val action: (Int) -> Unit
     ) : ListenableSubscription {
         private var onUnsubscribe: (() -> Unit)? = null
 
-        override val subscribed: Boolean
-            get() {
-                return action in propertyImpl.listeners
-            }
+        override val subscribed get() = action in propertyImpl.listeners
 
         override fun unsubscribe() {
             if (!subscribed) return
