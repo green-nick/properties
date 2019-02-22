@@ -5,7 +5,7 @@ import com.github.greennick.properties.subscriptions.ListenableSubscription
 internal class IntPropertyImpl(initValue: Int) : MutableIntProperty {
     private val listeners = linkedSetOf<(Int) -> Unit>()
 
-    override var value: Int = initValue
+    override var value = initValue
         set(value) {
             if (value == field) return
             field = value
@@ -26,10 +26,7 @@ internal class IntPropertyImpl(initValue: Int) : MutableIntProperty {
     ) : ListenableSubscription {
         private var onUnsubscribe: (() -> Unit)? = null
 
-        override val subscribed: Boolean
-            get() {
-                return action in propertyImpl.listeners
-            }
+        override val subscribed get() = action in propertyImpl.listeners
 
         override fun unsubscribe() {
             if (!subscribed) return

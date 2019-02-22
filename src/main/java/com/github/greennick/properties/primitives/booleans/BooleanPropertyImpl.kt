@@ -5,7 +5,7 @@ import com.github.greennick.properties.subscriptions.ListenableSubscription
 internal class BooleanPropertyImpl(initValue: Boolean) : MutableBooleanProperty {
     private val listeners = linkedSetOf<(Boolean) -> Unit>()
 
-    override var value: Boolean = initValue
+    override var value = initValue
         set(value) {
             if (value == field) return
             field = value
@@ -26,10 +26,7 @@ internal class BooleanPropertyImpl(initValue: Boolean) : MutableBooleanProperty 
     ) : ListenableSubscription {
         private var onUnsubscribe: (() -> Unit)? = null
 
-        override val subscribed: Boolean
-            get() {
-                return action in propertyImpl.listeners
-            }
+        override val subscribed get() = action in propertyImpl.listeners
 
         override fun unsubscribe() {
             if (!subscribed) return

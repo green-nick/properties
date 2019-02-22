@@ -5,7 +5,7 @@ import com.github.greennick.properties.subscriptions.ListenableSubscription
 class DoublePropertyImpl(initValue: Double) : MutableDoubleProperty {
     private val listeners = linkedSetOf<(Double) -> Unit>()
 
-    override var value: Double = initValue
+    override var value = initValue
         set(value) {
             if (value == field) return
             field = value
@@ -26,10 +26,7 @@ class DoublePropertyImpl(initValue: Double) : MutableDoubleProperty {
     ) : ListenableSubscription {
         private var onUnsubscribe: (() -> Unit)? = null
 
-        override val subscribed: Boolean
-            get() {
-                return action in propertyImpl.listeners
-            }
+        override val subscribed get() = action in propertyImpl.listeners
 
         override fun unsubscribe() {
             if (!subscribed) return

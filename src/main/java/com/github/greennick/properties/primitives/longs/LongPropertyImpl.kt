@@ -5,7 +5,7 @@ import com.github.greennick.properties.subscriptions.ListenableSubscription
 internal class LongPropertyImpl(initValue: Long) : MutableLongProperty {
     private val listeners = linkedSetOf<(Long) -> Unit>()
 
-    override var value: Long = initValue
+    override var value = initValue
         set(value) {
             if (value == field) return
             field = value
@@ -26,10 +26,7 @@ internal class LongPropertyImpl(initValue: Long) : MutableLongProperty {
     ) : ListenableSubscription {
         private var onUnsubscribe: (() -> Unit)? = null
 
-        override val subscribed: Boolean
-            get() {
-                return action in propertyImpl.listeners
-            }
+        override val subscribed get() = action in propertyImpl.listeners
 
         override fun unsubscribe() {
             if (!subscribed) return
