@@ -1,10 +1,10 @@
 [![](https://jitpack.io/v/green-nick/properties.svg)](https://jitpack.io/#green-nick/properties)
 # Properties
 Small, lightweight library that allows to use observable properties.  
-Written in pure Kotlin, without thirdparty dependenices, Kotlin oriented.  
+Written in pure Kotlin, without third-party dependencies, Kotlin oriented.  
 The difference from Kotlin's delegate `observable` is that you able to add listeners at any moment instead of only in initialization.
 
-Could be usefull in MVVM patterns, when you need to bind `Views` and `ViewModels`.
+Could be useful in MVVM patterns, when you need to bind `Views` and `ViewModels`.
 
 ## How to add to Project:
 **Step 1.** Add the JitPack repository to your build file.  
