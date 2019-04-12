@@ -4,7 +4,7 @@ package com.github.greennick.properties.generic
 
 import com.github.greennick.properties.propertyOf
 
-operator fun <T, R> Property<T>.plus(another: Property<R>): Property<Pair<T, R>> {
+operator fun <T, R> Property<T>.plus(another: Property<R>): MutableProperty<Pair<T, R>> {
     val new = propertyOf(this.value to another.value)
 
     this.subscribe { new.value = it to another.value }
@@ -13,7 +13,7 @@ operator fun <T, R> Property<T>.plus(another: Property<R>): Property<Pair<T, R>>
     return new
 }
 
-fun <T, R> Property<T>.map(mapper: (T) -> R): Property<R> {
+fun <T, R> Property<T>.map(mapper: (T) -> R): MutableProperty<R> {
     val new = propertyOf(mapper(this.value))
 
     this.subscribe { new.value = mapper(it) }
