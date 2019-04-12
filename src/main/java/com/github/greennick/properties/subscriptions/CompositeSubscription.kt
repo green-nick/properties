@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.github.greennick.properties.subscriptions
 
 class CompositeSubscription : Subscription {
@@ -25,8 +27,8 @@ class CompositeSubscription : Subscription {
     fun add(vararg subscriptions: Subscription) {
         this.subscriptions.addAll(subscriptions)
     }
+
+    operator fun plusAssign(subscription: Subscription) = add(subscription)
 }
 
-fun Subscription.attachTo(compositeSubscription: CompositeSubscription) {
-    compositeSubscription.add(this)
-}
+fun Subscription.attachTo(compositeSubscription: CompositeSubscription) = compositeSubscription.add(this)
