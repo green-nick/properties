@@ -18,8 +18,99 @@ repositories {
 **Step 2.** Add the dependency
 ```
 dependencies {
-    implementation 'com.github.green-nick:properties:{latest version}'
+    implementation "com.github.green-nick:properties:{put latest version here}"
 }
 ```
 ## Usage examples:
-You can find usage examples in the unit-tests [package](https://github.com/green-nick/properties/tree/master/src/test/java/com/github/greennick/properties)
+### Initialization:
+Create non-null mutable property with default value:
+
+`val property: MutableProperty<String> = propertyOf("Hello!")`
+
+Create mutable property that holds nullable value but doesn't require default one:
+
+`val empty: MutableProperty<String?> = emptyProperty<String>()`
+
+Actually works the same as `propertyOf<String?>(null)`
+### Assignment & Reading:
+Assignment new value to the property (also will update active observers):
+
+`property.value = "this string will be assigned and pushed to all observers"`
+
+Notice, that you able to change value of mutable property only!
+```
+val mutable: MutableProperty<String> = propertyOf("Hello!")
+mutable.value = "world!" // this works
+
+val immutable: Property<String> = mutable
+immutable.value = "or not" // but this doesn't
+```
+
+Reading current value from the property:
+```
+val property = propertyOf("Hello")
+val currentValue = property.value // currentValue will get "Hello"
+```
+### Listening changes:
+After subscribing on property, you will receive current value immediately:
+```
+val property = propertyOf("Hello")
+
+property.subscribe {
+    println("receive [$it]")
+}
+
+property.value = "world!"
+```
+Output of these calls:
+
+```
+receive [Hello]
+receive [world!]
+```
+
+Also you able to handle lifecycle of subscriptions and unsubscribe when you don't want receive any updates anymore:
+```
+val property = propertyOf("Hello")
+
+val subscription: Subscription = property.subscribe {
+    println("receive [$it]")
+}
+
+property.value = "world!"
+
+subscription.unsubscribe()
+
+property.value = "or not" // this update won't be printed into console
+```
+Output of these calls:
+
+```
+receive [Hello]
+receive [world!]
+```
+### Additionals:
+#### Mapping:
+You also able to map one property to another:
+```
+val property = propertyOf("Hello")
+
+val length: MutableProperty<Int> = property.map { it.length } // will contain 5
+```
+Also notice that mapped value will be triggered on all updates of origin one.
+#### Combining:
+You can combine two different properties into one and receive all updates pushed to origins as Pair of their values:
+```
+val hi = propertyOf("Hello")
+val person = propertyOf("world")
+
+val greeting: Property<Pair<String, String>> = hi + person
+
+greeting.subscribe { (hi, person) ->
+    println("$hi, $person!") // print "Hello, world!"
+}
+hi.value = "Aloha" // print "Aloha, world!"
+person.value = "Github" // print "Aloha, Github!"
+```
+
+Also you can find additional usage examples in the unit-tests [package](https://github.com/green-nick/properties/tree/master/src/test/java/com/github/greennick/properties)
