@@ -20,3 +20,12 @@ fun <T, R> Property<T>.map(mapper: (T) -> R): MutableProperty<R> {
 
     return new
 }
+
+fun <T, R, E> Property<T>.zipWith(another: Property<R>, zipper: (T, R) -> E): MutableProperty<E> {
+    val new = propertyOf(zipper(this.value, another.value))
+
+    this.subscribe { new.value = zipper(it, another.value) }
+    another.subscribe { new.value = zipper(this.value, it) }
+
+    return new
+}

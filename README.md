@@ -106,6 +106,22 @@ greeting.subscribe { (hi, person) ->
 hi.value = "Aloha" // print "Aloha, world!"
 person.value = "Github" // print "Aloha, Github!"
 ```
+#### Zipping:
+Similar to Combining, but allows you to convert output into single object instead of Pair:
+```
+val hi = propertyOf("Hello")
+val person = propertyOf("world")
+
+val greeting: Property<String> = hi.zipWith(person) { hi, person ->
+    "$hi, $person!"
+}
+
+greeting.subscribe {
+    println(it) // print "Hello, world!"
+}
+hi.value = "Aloha" // print "Aloha, world!"
+person.value = "Github" // print "Aloha, Github!"
+```
 
 Also you can find additional usage examples in the unit-tests [package](https://github.com/green-nick/properties/tree/master/src/test/java/com/github/greennick/properties)
 
