@@ -6,21 +6,6 @@ The difference from Kotlin's delegate `observable` is that you able to add liste
 
 Could be useful in MVVM patterns, when you need to bind `Views` and `ViewModels`.
 
-## How to add to Project:
-**Step 1.** Add the JitPack repository to your build file.  
-Add this in your module's build.gradle at the end of repositories:  
-```
-repositories {
-    ...
-    maven { url 'https://jitpack.io' }
-}
-```
-**Step 2.** Add the dependency
-```
-dependencies {
-    implementation "com.github.green-nick:properties:{put latest version here}"
-}
-```
 ## Usage examples:
 ### Initialization:
 Create non-null mutable property with default value:
@@ -51,7 +36,7 @@ Reading current value from the property:
 val property = propertyOf("Hello")
 val currentValue = property.value // currentValue will get "Hello"
 ```
-### Listening changes:
+### Listening to changes:
 After subscribing on property, you will receive current value immediately:
 ```
 val property = propertyOf("Hello")
@@ -62,11 +47,20 @@ property.subscribe {
 
 property.value = "world!"
 ```
-Output of these calls:
+Output:
 
 ```
 receive [Hello]
 receive [world!]
+```
+
+Beside that you can use invoke call for subscribing:
+```
+val property = propertyOf("Hello")
+
+property {
+    println("receive [$it]")
+}
 ```
 
 Also you able to handle lifecycle of subscriptions and unsubscribe when you don't want receive any updates anymore:
@@ -83,13 +77,13 @@ subscription.unsubscribe()
 
 property.value = "or not" // this update won't be printed into console
 ```
-Output of these calls:
+Output:
 
 ```
 receive [Hello]
 receive [world!]
 ```
-### Additionals:
+### Additions:
 #### Mapping:
 You also able to map one property to another:
 ```
@@ -112,5 +106,36 @@ greeting.subscribe { (hi, person) ->
 hi.value = "Aloha" // print "Aloha, world!"
 person.value = "Github" // print "Aloha, Github!"
 ```
+#### Zipping:
+Similar to Combining, but allows you to convert output into single object instead of Pair:
+```
+val hi = propertyOf("Hello")
+val person = propertyOf("world")
+
+val greeting: Property<String> = hi.zipWith(person) { hi, person ->
+    "$hi, $person!"
+}
+
+greeting.subscribe {
+    println(it) // print "Hello, world!"
+}
+hi.value = "Aloha" // print "Aloha, world!"
+person.value = "Github" // print "Aloha, Github!"
+```
 
 Also you can find additional usage examples in the unit-tests [package](https://github.com/green-nick/properties/tree/master/src/test/java/com/github/greennick/properties)
+
+## How to add to your project:
+**Step 1.** Add the JitPack repository to your build file.  
+Add this in your module's build.gradle at the end of repositories:  
+```
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+```
+**Step 2.** Add the dependency
+```
+dependencies {
+    implementation "com.github.green-nick:properties:{put latest version here}"
+}
+```

@@ -6,16 +6,6 @@ import org.junit.Test
 class PropertiesTests {
 
     @Test
-    fun `assure value is boxed`() {
-        val property = propertyOf<Int>(1000)
-
-        val firstBoxed: Int? = property.value
-        val secondBoxed: Int? = property.value
-
-        assert(firstBoxed === secondBoxed)
-    }
-
-    @Test
     fun `getting initial value`() {
         val init = "Hello"
         val property = propertyOf(init)
