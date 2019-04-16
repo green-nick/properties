@@ -13,6 +13,8 @@ operator fun <T, R> Property<T>.plus(another: Property<R>): MutableProperty<Pair
     return new
 }
 
+operator fun <T> Property<T>.invoke(onChanged: (T) -> Unit) = subscribe(onChanged)
+
 fun <T, R> Property<T>.map(mapper: (T) -> R): MutableProperty<R> {
     val new = propertyOf(mapper(this.value))
 
