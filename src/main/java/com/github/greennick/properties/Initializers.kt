@@ -18,11 +18,6 @@ fun <T> propertyOf(value: T): MutableProperty<T> = PropertyImpl(value)
  *
  * The only difference between this and [propertyOf] is
  * this property doesn't use equality checks at all, so it will be triggered on every new assignment.
- *
- * There are two purposes of using this property:
- * 1. You need to be triggered on every assignment;
- * 2. Value that has to be assigned has big computational load on equality checks.
- *    For example a list which contains a lot of elements inside
  */
 fun <T> triggerPropertyOf(value: T): MutableProperty<T> = TriggeredProperty(value)
 
