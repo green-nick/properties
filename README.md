@@ -12,7 +12,6 @@ Create non-null mutable property with default value:
 
 `val property: MutableProperty<String> = propertyOf("Hello!")`
 
-Actually works the same as `propertyOf<String?>(null)`
 ### Assignment & Reading:
 Assignment new value to the property (also will update active observers):
 
