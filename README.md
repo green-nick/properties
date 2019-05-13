@@ -12,10 +12,6 @@ Create non-null mutable property with default value:
 
 `val property: MutableProperty<String> = propertyOf("Hello!")`
 
-Create mutable property that holds nullable value but doesn't require default one:
-
-`val empty: MutableProperty<String?> = emptyProperty<String>()`
-
 Actually works the same as `propertyOf<String?>(null)`
 ### Assignment & Reading:
 Assignment new value to the property (also will update active observers):
@@ -83,6 +79,18 @@ Output:
 receive [Hello]
 receive [world!]
 ```
+### Types:
+#### `propertyOf`
+Default one. Allows to read and assign values and listen its changes.
+Does equality check when new value is being assigned.
+So if new value is the same as previous one - change listener won't be triggered.
+#### `emptyProperty`
+Just another initializer of `propertyOf`.
+Allows not to set init value and final type will be nullable anyway.
+#### `triggerPropertyOf`
+Unlike `propertyOf`, this property doesn't use equality check at all.
+This means that it will be triggered on every new assignment even if new value the same as previous one.
+
 ### Additions:
 #### Mapping:
 You also able to map one property to another:
