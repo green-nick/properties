@@ -14,6 +14,11 @@ import com.github.greennick.properties.generic.TriggeredProperty
 fun <T> propertyOf(value: T): MutableProperty<T> = PropertyImpl(value)
 
 /**
+ * Alias to [propertyOf] that allows to skip setting initial value, but it will set nullable type.
+ */
+fun <T> emptyProperty(value: T? = null): MutableProperty<T?> = propertyOf(value)
+
+/**
  * Create Property object of given object.
  * You can read, write and listen value's assignments.
  *
@@ -23,8 +28,10 @@ fun <T> propertyOf(value: T): MutableProperty<T> = PropertyImpl(value)
 fun <T> triggerPropertyOf(value: T): MutableProperty<T> = TriggeredProperty(value)
 
 /**
- * Alias to [propertyOf] that allows to skip setting initial value, but it will set nullable type.
+ * Special property that emits value only one time.
+ * If there is new subscription, it won't receive updates until new assignment will be done.
+ *
+ * Pay attention, that there is only one active subscriber exist.
+ * Every new subscription will cancel previous one automatically.
  */
-fun <T> emptyProperty(value: T? = null): MutableProperty<T?> = propertyOf(value)
-
 fun <T> fireProperty(value: T): MutableProperty<T> = FireProperty(value)
