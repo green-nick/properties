@@ -2,6 +2,17 @@ package com.github.greennick.properties.generic
 
 import com.github.greennick.properties.propertyOf
 
+/**
+ * General extensions section
+ */
+operator fun <T> Property<T>.invoke(onChanged: (T) -> Unit) = subscribe(onChanged)
+
+fun <T> Property<T?>.nonNullSubscribe(onChanged: (T) -> Unit) = subscribe { it?.also(onChanged) }
+
+/**
+ * Combining extensions section
+ */
+
 operator fun <T, R> Property<T>.plus(another: Property<R>): MutableProperty<Pair<T, R>> {
     val new = propertyOf(this.value to another.value)
 
@@ -10,8 +21,6 @@ operator fun <T, R> Property<T>.plus(another: Property<R>): MutableProperty<Pair
 
     return new
 }
-
-operator fun <T> Property<T>.invoke(onChanged: (T) -> Unit) = subscribe(onChanged)
 
 fun <T, R> Property<T>.map(mapper: (T) -> R): MutableProperty<R> {
     val new = propertyOf(mapper(this.value))
@@ -28,4 +37,20 @@ fun <T, R, E> Property<T>.zipWith(another: Property<R>, zipper: (T, R) -> E): Mu
     another.subscribe { new.value = zipper(this.value, it) }
 
     return new
+}
+
+/**
+ * Boolean extensions section
+ */
+
+operator fun Property<Boolean>.not(): MutableProperty<Boolean> {
+    val new = propertyOf(!this.value)
+
+    this.subscribe { new.value = !it }
+
+    return new
+}
+
+fun MutableProperty<Boolean>.toggle() {
+    this.value = !this.value
 }

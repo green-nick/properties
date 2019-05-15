@@ -12,11 +12,6 @@ Create non-null mutable property with default value:
 
 `val property: MutableProperty<String> = propertyOf("Hello!")`
 
-Create mutable property that holds nullable value but doesn't require default one:
-
-`val empty: MutableProperty<String?> = emptyProperty<String>()`
-
-Actually works the same as `propertyOf<String?>(null)`
 ### Assignment & Reading:
 Assignment new value to the property (also will update active observers):
 
@@ -54,15 +49,6 @@ receive [Hello]
 receive [world!]
 ```
 
-Beside that you can use invoke call for subscribing:
-```
-val property = propertyOf("Hello")
-
-property {
-    println("receive [$it]")
-}
-```
-
 Also you able to handle lifecycle of subscriptions and unsubscribe when you don't want receive any updates anymore:
 ```
 val property = propertyOf("Hello")
@@ -83,7 +69,48 @@ Output:
 receive [Hello]
 receive [world!]
 ```
-### Additions:
+### Types:
+#### `propertyOf`
+Default one. Allows to read and assign values and listen its changes.
+Does equality check when new value is being assigned.
+So if new value is the same as previous one - change listener won't be triggered.
+#### `emptyProperty`
+Just another initializer of `propertyOf`.
+Allows not to set init value and final type will be nullable anyway.
+#### `triggerPropertyOf`
+Unlike `propertyOf`, this property doesn't use equality check at all.
+This means that it will be triggered on every new assignment even if new value the same as previous one.
+#### `fireProperty`
+Special property that emits value only one time. 
+If there is new subscription, it won't receive updates until new assignment will be done.
+
+**Pay attention**, that there is **only one active subscriber exist**.
+Every new subscription will cancel previous one automatically.
+### Extensions:
+#### General:
+
+You can use invoke call for subscribing instead of `subscribe`:
+```
+val property = propertyOf("Hello")
+
+property.invoke {
+    println("receive [$it]")
+}
+```
+or simplified form:
+```
+property {
+    println("receive [$it]")
+}
+```
+There is also extension subscription function for nullable properties that receives only non-nullable values:
+```
+val property = propertyOf<String?>(null)
+
+property.nonNullSubscribe { value ->
+    println(value) // value is not null
+}
+```
 #### Mapping:
 You also able to map one property to another:
 ```
@@ -92,8 +119,8 @@ val property = propertyOf("Hello")
 val length: MutableProperty<Int> = property.map { it.length } // will contain 5
 ```
 Also notice that mapped value will be triggered on all updates of origin one.
-#### Combining:
-You can combine two different properties into one and receive all updates pushed to origins as Pair of their values:
+#### Addition:
+You can add two different properties and get new one and receive all updates pushed to origins as Pair of their values:
 ```
 val hi = propertyOf("Hello")
 val person = propertyOf("world")
@@ -101,13 +128,13 @@ val person = propertyOf("world")
 val greeting: Property<Pair<String, String>> = hi + person
 
 greeting.subscribe { (hi, person) ->
-    println("$hi, $person!") // print "Hello, world!"
+    println("$hi, $person!") // prints "Hello, world!"
 }
-hi.value = "Aloha" // print "Aloha, world!"
-person.value = "Github" // print "Aloha, Github!"
+hi.value = "Aloha" // prints "Aloha, world!"
+person.value = "Github" // prints "Aloha, Github!"
 ```
 #### Zipping:
-Similar to Combining, but allows you to convert output into single object instead of Pair:
+Similar to Addition, but allows you to convert output into single object instead of Pair:
 ```
 val hi = propertyOf("Hello")
 val person = propertyOf("world")
@@ -117,10 +144,33 @@ val greeting: Property<String> = hi.zipWith(person) { hi, person ->
 }
 
 greeting.subscribe {
-    println(it) // print "Hello, world!"
+    println(it) // prints "Hello, world!"
 }
-hi.value = "Aloha" // print "Aloha, world!"
-person.value = "Github" // print "Aloha, Github!"
+hi.value = "Aloha" // prints "Aloha, world!"
+person.value = "Github" // prints "Aloha, Github!"
+```
+#### Booleans:
+There are two extension for Properties that holds boolean value.
+
+First one is `toggle`. It allows to invert value stored in property. 
+Could be called only on `MutableProperty<Boolean>`
+```
+val property: MutableProperty<Boolean> = propertyOf(true)
+val currentValue = property.value // true
+
+property.toggle()
+val newValue = property.value // false
+```
+
+Second one is logical `not` operator. It creates new property with inverted value of parent's:
+```
+val property: MutableProperty<Boolean> = propertyOf(true)
+val inverted = !property
+
+println(inverted.value) // false
+
+property.value = false
+println(inverted.value) // true
 ```
 
 Also you can find additional usage examples in the unit-tests [package](https://github.com/green-nick/properties/tree/master/src/test/java/com/github/greennick/properties)
