@@ -103,6 +103,14 @@ property {
     println("receive [$it]")
 }
 ```
+There is also extension subscription function for nullable properties that receives only non-nullable values:
+```
+val property = propertyOf<String?>(null)
+
+property.nonNullSubscribe { value ->
+    println(value) // value is not null
+}
+```
 #### Mapping:
 You also able to map one property to another:
 ```
