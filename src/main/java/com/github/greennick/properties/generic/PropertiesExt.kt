@@ -7,6 +7,8 @@ import com.github.greennick.properties.propertyOf
  */
 operator fun <T> Property<T>.invoke(onChanged: (T) -> Unit) = subscribe(onChanged)
 
+fun <T> Property<T?>.nonNullSubscribe(onChanged: (T) -> Unit) = subscribe { it?.also(onChanged) }
+
 /**
  * Combining extensions section
  */
