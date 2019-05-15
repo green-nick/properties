@@ -89,7 +89,12 @@ Allows not to set init value and final type will be nullable anyway.
 #### `triggerPropertyOf`
 Unlike `propertyOf`, this property doesn't use equality check at all.
 This means that it will be triggered on every new assignment even if new value the same as previous one.
+#### `fireProperty`
+Special property that emits value only one time. 
+If there is new subscription, it won't receive updates until new assignment will be done.
 
+**Pay attention**, that there is **only one active subscriber exist**.
+Every new subscription will cancel previous one automatically.
 ### Additions:
 #### Mapping:
 You also able to map one property to another:
