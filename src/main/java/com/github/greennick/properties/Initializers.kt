@@ -1,8 +1,9 @@
 package com.github.greennick.properties
 
+import com.github.greennick.properties.generic.*
 import com.github.greennick.properties.generic.FireProperty
-import com.github.greennick.properties.generic.MutableProperty
 import com.github.greennick.properties.generic.PropertyImpl
+import com.github.greennick.properties.generic.ThreadSafeProperty
 import com.github.greennick.properties.generic.TriggeredProperty
 
 /**
@@ -35,3 +36,6 @@ fun <T> triggerPropertyOf(value: T): MutableProperty<T> = TriggeredProperty(valu
  * Every new subscription will cancel previous one automatically.
  */
 fun <T> fireProperty(value: T): MutableProperty<T> = FireProperty(value)
+
+
+fun <T> threadSafeProperty(value: T): MutableProperty<T> = ThreadSafeProperty(value)
