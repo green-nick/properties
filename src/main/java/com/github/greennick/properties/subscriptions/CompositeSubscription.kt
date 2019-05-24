@@ -26,7 +26,7 @@ class CompositeSubscription : Subscription {
         this.subscriptions.addAll(subscriptions)
     }
 
-    operator fun plusAssign(subscription: Subscription) = add(subscription)
+    operator fun plusAssign(subscription: Subscription): Unit = add(subscription)
 }
 
-fun Subscription.addTo(compositeSubscription: CompositeSubscription) = compositeSubscription.add(this)
+fun Subscription.addTo(compositeSubscription: CompositeSubscription): Unit = compositeSubscription.add(this)
