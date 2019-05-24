@@ -1,14 +1,8 @@
 package com.github.greennick.properties.generic
 
+import com.github.greennick.properties.Cancellable
+import com.github.greennick.properties.Executor
 import com.github.greennick.properties.subscriptions.ListenableSubscription
-import java.util.concurrent.Executors
-import java.util.concurrent.Future
-import java.util.concurrent.ScheduledExecutorService
-import java.util.concurrent.TimeUnit
-
-typealias Executor = (delay: Long, action: () -> Unit) -> Cancellable
-
-typealias Cancellable = () -> Unit
 
 internal class DebounceProperty<T>(
     private val delay: Long,
@@ -55,20 +49,5 @@ internal class DebounceProperty<T>(
         override fun onUnsubscribe(action: () -> Unit) {
             onUnsubscribe = action
         }
-    }
-}
-
-class JavaExecutorWrapper(
-    private val executor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
-) : Executor {
-
-    override fun invoke(delay: Long, action: () -> Unit): Cancellable =
-        FutureWrapper(executor.schedule(action, delay, TimeUnit.MILLISECONDS))
-}
-
-class FutureWrapper(private val future: Future<*>) : Cancellable {
-
-    override fun invoke() {
-        future.cancel(false)
     }
 }
