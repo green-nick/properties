@@ -1,6 +1,7 @@
 package com.github.greennick.properties.generic
 
 import com.github.greennick.properties.propertyOf
+import com.github.greennick.properties.subscriptions.ListenableSubscription
 
 /**
  * General extensions section
@@ -42,6 +43,16 @@ fun <T, R, E> Property<T>.zipWith(another: Property<R>, zipper: (T, R) -> E): Mu
 /**
  * Boolean extensions section
  */
+
+fun Property<out Boolean?>.subscribeOnTrue(onTrue: () -> Unit): ListenableSubscription =
+    subscribe {
+        if (it == true) onTrue()
+    }
+
+fun Property<out Boolean?>.subscribeOnFalse(onFalse: () -> Unit): ListenableSubscription =
+    subscribe {
+        if (it == false) onFalse()
+    }
 
 operator fun Property<Boolean>.not(): MutableProperty<Boolean> {
     val new = propertyOf(!this.value)
