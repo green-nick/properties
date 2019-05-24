@@ -9,7 +9,7 @@ class GeneralExtensionsTest {
     fun `non-null subscriber wasn't called on null value`() {
         var calls = 0
         val property = emptyProperty<String>()
-        property.nonNullSubscribe {
+        property.subscribeNonNull {
             calls++
         }
 

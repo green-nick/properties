@@ -107,7 +107,7 @@ There is also extension subscription function for nullable properties that recei
 ```
 val property = propertyOf<String?>(null)
 
-property.nonNullSubscribe { value ->
+property.subscribeNonNull { value ->
     println(value) // value is not null
 }
 ```
@@ -150,7 +150,7 @@ hi.value = "Aloha" // prints "Aloha, world!"
 person.value = "Github" // prints "Aloha, Github!"
 ```
 #### Booleans:
-There are two extension for Properties that holds boolean value.
+There are few extension for Properties that holds boolean value.
 
 First one is `toggle`. It allows to invert value stored in property. 
 Could be called only on `MutableProperty<Boolean>`
@@ -171,6 +171,25 @@ println(inverted.value) // false
 
 property.value = false
 println(inverted.value) // true
+```
+
+Beside that, there are two additional extensions: `subscribeOnTrue` and `subscribeOnFalse`.
+
+Callback will be triggered only if correspond value will be set into property:
+```
+val property = propertyOf(true)
+
+property.subscribeOnTrue { println("received true") }
+property.subscribeOnFalse { println("received false") }
+
+property.value = false
+property.value = true
+```
+Output:
+```
+received true
+received false
+received true
 ```
 
 Also you can find additional usage examples in the unit-tests [package](https://github.com/green-nick/properties/tree/master/src/test/java/com/github/greennick/properties)
