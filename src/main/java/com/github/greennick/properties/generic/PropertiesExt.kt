@@ -6,9 +6,11 @@ import com.github.greennick.properties.subscriptions.ListenableSubscription
 /**
  * General extensions section
  */
-operator fun <T> Property<T>.invoke(onChanged: (T) -> Unit) = subscribe(onChanged)
+operator fun <T> Property<T>.invoke(onChanged: (T) -> Unit): ListenableSubscription =
+    subscribe(onChanged)
 
-fun <T> Property<T?>.nonNullSubscribe(onChanged: (T) -> Unit) = subscribe { it?.also(onChanged) }
+fun <T> Property<T?>.nonNullSubscribe(onChanged: (T) -> Unit): ListenableSubscription =
+    subscribe { it?.also(onChanged) }
 
 /**
  * Combining extensions section
