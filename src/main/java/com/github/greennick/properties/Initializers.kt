@@ -1,9 +1,6 @@
 package com.github.greennick.properties
 
-import com.github.greennick.properties.generic.FireProperty
-import com.github.greennick.properties.generic.MutableProperty
-import com.github.greennick.properties.generic.PropertyImpl
-import com.github.greennick.properties.generic.TriggeredProperty
+import com.github.greennick.properties.generic.*
 
 /**
  * Create Property object of given object.
@@ -34,4 +31,4 @@ fun <T> triggerPropertyOf(value: T): MutableProperty<T> = TriggeredProperty(valu
  * Pay attention, that there is only one active subscriber exist.
  * Every new subscription will cancel previous one automatically.
  */
-fun <T> fireProperty(value: T): MutableProperty<T> = FireProperty(value)
+fun <T> firePropertyOf(value: T): MutableProperty<T> = FireProperty(value)

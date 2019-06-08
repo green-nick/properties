@@ -1,6 +1,6 @@
 package com.github.greennick.properties.generic
 
-import com.github.greennick.properties.fireProperty
+import com.github.greennick.properties.firePropertyOf
 import org.junit.Test
 
 class FirePropertyTest {
@@ -8,7 +8,7 @@ class FirePropertyTest {
     @Test
     fun `listener triggered only once`() {
         var calls = 0
-        val property = fireProperty("Hello")
+        val property = firePropertyOf("Hello")
         property.subscribe { calls++ }
         property.subscribe { calls++ }
 
@@ -18,7 +18,7 @@ class FirePropertyTest {
     @Test
     fun `listener triggered after new assignment`() {
         var calls = 0
-        val property = fireProperty("Hello")
+        val property = firePropertyOf("Hello")
         property.subscribe { calls++ }
         property.value = "new"
 
@@ -28,7 +28,7 @@ class FirePropertyTest {
     @Test
     fun `listener triggered on equal values assignment`() {
         val initValue = "Hello"
-        val property = fireProperty(initValue)
+        val property = firePropertyOf(initValue)
 
         var calls = 0
 
@@ -41,7 +41,7 @@ class FirePropertyTest {
 
     @Test
     fun `only last subscription is active`() {
-        val property = fireProperty("Hello")
+        val property = firePropertyOf("Hello")
         val firstSubscription = property.subscribe { }
         val secondSubscription = property.subscribe { }
 
