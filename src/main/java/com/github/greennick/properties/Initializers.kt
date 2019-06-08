@@ -1,9 +1,6 @@
 package com.github.greennick.properties
 
-import com.github.greennick.properties.generic.FireProperty
-import com.github.greennick.properties.generic.MutableProperty
-import com.github.greennick.properties.generic.PropertyImpl
-import com.github.greennick.properties.generic.TriggeredProperty
+import com.github.greennick.properties.generic.*
 
 /**
  * Create Property object of given object.
