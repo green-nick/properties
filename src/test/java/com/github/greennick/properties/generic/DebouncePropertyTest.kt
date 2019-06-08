@@ -1,6 +1,6 @@
 package com.github.greennick.properties.generic
 
-import com.github.greennick.properties.debounceProperty
+import com.github.greennick.properties.debouncePropertyOf
 import org.junit.Test
 import java.util.concurrent.CountDownLatch
 
@@ -12,7 +12,7 @@ class DebouncePropertyTest {
         val startTime = now
         val countdown = CountDownLatch(2)
 
-        val property = debounceProperty("hello", delay)
+        val property = debouncePropertyOf("hello", delay)
         property.subscribe {
             println("[$it] in thread ${Thread.currentThread().name}")
 
@@ -29,7 +29,7 @@ class DebouncePropertyTest {
         val countdown = CountDownLatch(2)
         val collected = mutableListOf<String>()
 
-        val property = debounceProperty("a", 300)
+        val property = debouncePropertyOf("a", 300)
         property.subscribe {
             println("[$it] in thread ${Thread.currentThread().name}")
             collected += it
@@ -56,7 +56,7 @@ class DebouncePropertyTest {
         val delay = 300L
         val collected = mutableListOf<String>()
 
-        val property = debounceProperty("a", delay)
+        val property = debouncePropertyOf("a", delay)
         property.subscribe {
             println("[$it] in thread ${Thread.currentThread().name}")
             collected += it

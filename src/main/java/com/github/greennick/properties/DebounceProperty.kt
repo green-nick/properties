@@ -7,7 +7,7 @@ import java.util.concurrent.Future
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 
-fun <T> debounceProperty(value: T, delay: Long, executor: Executor = JavaExecutor()): MutableProperty<T> =
+fun <T> debouncePropertyOf(value: T, delay: Long, executor: Executor = JavaExecutor()): MutableProperty<T> =
     DebounceProperty(delay, executor, value)
 
 typealias Executor = (delay: Long, action: () -> Unit) -> Cancellable
