@@ -1,10 +1,13 @@
 package com.github.greennick.properties.generic
 
-import com.github.greennick.properties.debouncePropertyOf
+import com.github.greennick.properties.debounce.debouncePropertyOf
 import org.junit.Test
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
 
 class DebouncePropertyTest {
+    private val executor: ScheduledExecutorService = Executors.newSingleThreadScheduledExecutor()
 
     @Test
     fun `first update made after exact delay`() {
@@ -12,7 +15,7 @@ class DebouncePropertyTest {
         val startTime = now
         val countdown = CountDownLatch(2)
 
-        val property = debouncePropertyOf("hello", delay)
+        val property = debouncePropertyOf("hello", delay, executor)
         property.subscribe {
             println("[$it] in thread ${Thread.currentThread().name}")
 
@@ -29,7 +32,7 @@ class DebouncePropertyTest {
         val countdown = CountDownLatch(2)
         val collected = mutableListOf<String>()
 
-        val property = debouncePropertyOf("a", 300)
+        val property = debouncePropertyOf("a", 300, executor)
         property.subscribe {
             println("[$it] in thread ${Thread.currentThread().name}")
             collected += it
@@ -56,7 +59,7 @@ class DebouncePropertyTest {
         val delay = 300L
         val collected = mutableListOf<String>()
 
-        val property = debouncePropertyOf("a", delay)
+        val property = debouncePropertyOf("a", delay, executor)
         property.subscribe {
             println("[$it] in thread ${Thread.currentThread().name}")
             collected += it
