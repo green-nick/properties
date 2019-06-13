@@ -1,6 +1,5 @@
-package com.github.greennick.properties.generic
+package com.github.greennick.properties.debounce
 
-import com.github.greennick.properties.debounce.debouncePropertyOf
 import org.junit.Test
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
