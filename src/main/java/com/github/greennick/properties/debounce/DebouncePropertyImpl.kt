@@ -10,12 +10,16 @@ internal class DebouncePropertyImpl<T>(
     private val listeners = linkedSetOf<(T) -> Unit>()
     private var previousUpdate: Cancellable? = null
 
-    override var value = initValue
+    @Volatile
+    private var _value = initValue
+
+    override var value
+        get() = _value
         set(value) {
             previousUpdate?.invoke()
             previousUpdate = executor.invoke(delay) {
-                if (value == field) return@invoke
-                field = value
+                if (value == _value) return@invoke
+                _value = value
                 listeners.forEach { it(value) }
             }
         }
@@ -28,8 +32,8 @@ internal class DebouncePropertyImpl<T>(
 
     override fun forceSet(value: T) {
         previousUpdate?.invoke()
-        if (this.value == value) return
-        this.value = value
+        if (value == _value) return
+        _value = value
         listeners.forEach { it(value) }
     }
 
