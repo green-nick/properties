@@ -1,14 +1,12 @@
-package com.github.greennick.properties.generic
+package com.github.greennick.properties.debounce
 
-import com.github.greennick.properties.Cancellable
-import com.github.greennick.properties.Executor
 import com.github.greennick.properties.subscriptions.ListenableSubscription
 
-internal class DebounceProperty<T>(
+internal class DebouncePropertyImpl<T>(
     private val delay: Long,
     private val executor: Executor,
     initValue: T
-) : MutableProperty<T> {
+) : DebounceProperty<T> {
     private val listeners = linkedSetOf<(T) -> Unit>()
     private var previousUpdate: Cancellable? = null
 
@@ -28,10 +26,17 @@ internal class DebounceProperty<T>(
         return SubscriptionImpl(this, onChanged)
     }
 
+    override fun forceSet(value: T) {
+        previousUpdate?.invoke()
+        if (this.value == value) return
+        this.value = value
+        listeners.forEach { it(value) }
+    }
+
     override fun toString() = "Property of [$value]"
 
     private class SubscriptionImpl<T>(
-        private val propertyImpl: DebounceProperty<T>,
+        private val propertyImpl: DebouncePropertyImpl<T>,
         private val action: (T) -> Unit
     ) : ListenableSubscription {
         private var onUnsubscribe: (() -> Unit)? = null
