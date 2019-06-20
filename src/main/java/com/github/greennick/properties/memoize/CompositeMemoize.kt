@@ -2,10 +2,10 @@ package com.github.greennick.properties.memoize
 
 class CompositeMemoize(private vararg val memos: MemoizeProperty<*, *>) {
 
-    private val calls = mutableListOf<Pair<MemoizeProperty<*, *>, Int>>()
+    private val history = mutableListOf<Pair<MemoizeProperty<*, *>, Int>>()
     private val initPositions = memos.map { it.position }
 
-    val size: Int get() = calls.size + 1
+    val size: Int get() = history.size + 1
 
     var position: Int = 0
         set(value) {
@@ -15,6 +15,7 @@ class CompositeMemoize(private vararg val memos: MemoizeProperty<*, *>) {
                 value == 0 -> memos.forEachIndexed { index, memo ->
                     memo.position = initPositions[index]
                 }
+                value == 1 -> field = value
                 field < value -> goToNewer(current = field, new = value)
                 else -> goToOlder(current = field, old = value)
             }
@@ -26,20 +27,47 @@ class CompositeMemoize(private vararg val memos: MemoizeProperty<*, *>) {
         memos.filterIsInstance(MemoizePropertyImpl::class.java)
             .forEach { memo ->
                 memo.onNewValueSet {
-                    calls.add(memo to memo.position)
-                    position = size
+                    if (position < size - 1) {
+                        clearHistory()
+                    }
+
+                    history.add(memo to memo.position)
+                    position = size - 1
                 }
             }
     }
 
     private fun goToNewer(current: Int, new: Int) {
-        calls.subList(current - 1, new - 1)
+        history.subList(current - 1, new - 1)
             .forEach { (property, position) -> property.position = position }
     }
 
     private fun goToOlder(current: Int, old: Int) {
-        calls.subList(old - 1, current - 1)
+        history.subList(old - 1, current - 1)
             .reversed()
             .forEach { (property, position) -> property.position = position }
     }
+
+    private fun clearHistory() {
+        ((size - 2) downTo position).forEach {
+            history.removeAt(it)
+        }
+    }
+
+    override fun toString() =
+        "CompositeMemoize [${position + 1}/$size]:\n" +
+                (listOf(
+                    memos.mapIndexed { index, memo ->
+                        "${memo.origin}:${initPositions[index]}"
+                    }.joinToString()
+                ) + history.map { (memo, position) ->
+                    "${memo.origin}:$position"
+                }).mapIndexed { index, string ->
+                    if (index == position) {
+                        "* "
+                    } else {
+                        "  "
+                    } + string
+                }.joinToString("\n")
+
 }
