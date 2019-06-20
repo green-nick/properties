@@ -3,6 +3,7 @@ package com.github.greennick.properties.memoize
 import com.github.greennick.properties.generic.MutableProperty
 
 class MemoizePropertyImpl<T, M : MutableProperty<T>>(override val origin: M) : MemoizeProperty<T, M> {
+
     private val history = mutableListOf(origin.value)
     private var onNewSet: () -> Unit = {}
 
@@ -12,6 +13,8 @@ class MemoizePropertyImpl<T, M : MutableProperty<T>>(override val origin: M) : M
         set(value) {
             if (value < 0 || value >= size) {
                 throw IllegalStateException("Position should be in range 0..size")
+            } else if (value == field) {
+                return
             }
             origin.value = history[value]
             field = value
