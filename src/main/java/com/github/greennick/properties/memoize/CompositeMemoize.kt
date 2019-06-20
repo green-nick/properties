@@ -1,6 +1,6 @@
 package com.github.greennick.properties.memoize
 
-class CompositeMemoize(private val memos: List<MemoizeProperty<*, *>>) {
+class CompositeMemoize(private vararg val memos: MemoizeProperty<*, *>) {
 
     private val calls = mutableListOf<Pair<MemoizeProperty<*, *>, Int>>()
     private val initPositions = memos.map { it.position }
