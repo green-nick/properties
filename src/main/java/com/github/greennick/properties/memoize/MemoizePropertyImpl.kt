@@ -2,12 +2,12 @@ package com.github.greennick.properties.memoize
 
 import com.github.greennick.properties.generic.MutableProperty
 
-class MemoizePropertyImpl<T, M : MutableProperty<T>>(override val origin: M) : MemoizeProperty<T, M> {
+internal class MemoizePropertyImpl<T, M : MutableProperty<T>>(override val origin: M) : MemoizeProperty<T, M> {
 
     private val history = mutableListOf(origin.value)
     private var onNewSet: () -> Unit = {}
 
-    override val size = history.size
+    override val size get() = history.size
 
     override var position: Int = 0
         set(value) {
