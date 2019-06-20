@@ -1,5 +1,8 @@
 package com.github.greennick.properties
 
+import com.github.greennick.properties.debounce.DebounceProperty
+import com.github.greennick.properties.debounce.DebouncePropertyImpl
+import com.github.greennick.properties.debounce.Executor
 import com.github.greennick.properties.generic.*
 
 /**
@@ -32,3 +35,12 @@ fun <T> triggerPropertyOf(value: T): MutableProperty<T> = TriggeredProperty(valu
  * Every new subscription will cancel previous one automatically.
  */
 fun <T> firePropertyOf(value: T): MutableProperty<T> = FireProperty(value)
+
+/**
+ * Only set an item to Property if a particular delay has passed without it setting another item.
+ *
+ * @param delay - threshold which has to be passed, before new value will be set.
+ * @param executor - executor which able to postpone task execution with given delay and supports its cancellation.
+ */
+fun <T> debouncePropertyOf(value: T, delay: Long, executor: Executor): DebounceProperty<T> =
+    DebouncePropertyImpl(delay, executor, value)

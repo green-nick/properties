@@ -9,6 +9,3 @@ interface DebounceProperty<T> : MutableProperty<T> {
 typealias Executor = (delay: Long, action: () -> Unit) -> Cancellable
 
 typealias Cancellable = () -> Unit
-
-fun <T> debouncePropertyOf(value: T, delay: Long, executor: Executor): DebounceProperty<T> =
-    DebouncePropertyImpl(delay, executor, value)

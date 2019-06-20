@@ -80,12 +80,12 @@ Allows not to set init value and final type will be nullable anyway.
 #### `triggerPropertyOf`
 Unlike `propertyOf`, this property doesn't use equality check at all.
 This means that it will be triggered on every new assignment even if new value the same as previous one.
-#### `fireProperty`
+#### `firePropertyOf`
 Special property that emits value only one time. 
 If there is new subscription, it won't receive updates until new assignment will be done.
 #### `debouncePropertyOf`
 Only set an item to Property if a particular delay has passed without it setting another item.
-By default uses Java's `SingleThreadScheduledExecutor`, but you can set your own.
+Has a version that uses Java's `SingleThreadScheduledExecutor`, but you can set your own.
 
 **Pay attention**, that there is **only one active subscriber exist**.
 Every new subscription will cancel previous one automatically.

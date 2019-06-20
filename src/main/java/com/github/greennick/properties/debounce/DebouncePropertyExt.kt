@@ -5,7 +5,7 @@ import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 
 fun <T> debouncePropertyOf(value: T, delay: Long, executor: ScheduledExecutorService): DebounceProperty<T> =
-    debouncePropertyOf(value, delay, JavaExecutor(executor))
+    com.github.greennick.properties.debouncePropertyOf(value, delay, JavaExecutor(executor))
 
 private class JavaExecutor(private val executor: ScheduledExecutorService) : Executor {
 
