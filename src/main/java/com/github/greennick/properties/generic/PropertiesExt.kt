@@ -1,5 +1,8 @@
 package com.github.greennick.properties.generic
 
+import com.github.greennick.properties.debounce.DebounceProperty
+import com.github.greennick.properties.memoize.MemoizeProperty
+import com.github.greennick.properties.memoize.MemoizePropertyImpl
 import com.github.greennick.properties.propertyOf
 import com.github.greennick.properties.subscriptions.ListenableSubscription
 
@@ -11,6 +14,20 @@ operator fun <T> Property<T>.invoke(onChanged: (T) -> Unit): ListenableSubscript
 
 fun <T> Property<T?>.subscribeNonNull(onChanged: (T) -> Unit): ListenableSubscription =
     subscribe { it?.also(onChanged) }
+
+val <T> MutableProperty<T>.memoized: MemoizeProperty<T, MutableProperty<T>>
+    get() = MemoizePropertyImpl(this)
+
+val <T> DebounceProperty<T>.memoized: MemoizeProperty<T, DebounceProperty<T>>
+    get() = MemoizePropertyImpl(this)
+
+fun MemoizeProperty<*, *>.first() {
+    position = 0
+}
+
+fun MemoizeProperty<*, *>.last() {
+    position = size - 1
+}
 
 /**
  * Combining extensions section
