@@ -1,9 +1,10 @@
 package com.github.greennick.properties.memoize
 
-class CompositeMemoize(private vararg val memos: MemoizeProperty<*, *>) {
+class CompositeMemoize(first: MemoizeProperty<*, *>, vararg memos: MemoizeProperty<*, *>) {
 
+    private val _memos = arrayOf(first) + memos
     private val history = mutableListOf<Pair<MemoizeProperty<*, *>, Int>>()
-    private val initPositions = memos.map { it.position }
+    private val initPositions = _memos.map { it.position }
 
     val size: Int get() = history.size + 1
 
@@ -12,10 +13,13 @@ class CompositeMemoize(private vararg val memos: MemoizeProperty<*, *>) {
             when {
                 value < 0 || value >= size -> throw IllegalStateException("Position should be in range 0..size")
                 value == field -> return
-                value == 0 -> memos.forEachIndexed { index, memo ->
+                value == 0 -> _memos.forEachIndexed { index, memo ->
                     memo.position = initPositions[index]
                 }
-                value == 1 -> field = value
+                value == 1 -> {
+                    val insertion = history[0]
+                    insertion.first.position = insertion.second
+                }
                 field < value -> goToNewer(current = field, new = value)
                 else -> goToOlder(current = field, old = value)
             }
@@ -24,7 +28,7 @@ class CompositeMemoize(private vararg val memos: MemoizeProperty<*, *>) {
         }
 
     init {
-        memos.filterIsInstance(MemoizePropertyImpl::class.java)
+        _memos.filterIsInstance(MemoizePropertyImpl::class.java)
             .forEach { memo ->
                 memo.onNewValueSet {
                     if (position < size - 1) {
@@ -38,7 +42,7 @@ class CompositeMemoize(private vararg val memos: MemoizeProperty<*, *>) {
     }
 
     private fun goToNewer(current: Int, new: Int) {
-        history.subList(current - 1, new - 1)
+        history.subList(current, new)
             .forEach { (property, position) -> property.position = position }
     }
 
@@ -57,11 +61,11 @@ class CompositeMemoize(private vararg val memos: MemoizeProperty<*, *>) {
     override fun toString() =
         "CompositeMemoize [${position + 1}/$size]:\n" +
                 (listOf(
-                    memos.mapIndexed { index, memo ->
-                        "${memo.origin}:${initPositions[index]}"
+                    _memos.mapIndexed { index, memo ->
+                        "$memo:${initPositions[index]}"
                     }.joinToString()
                 ) + history.map { (memo, position) ->
-                    "${memo.origin}:$position"
+                    "$memo:$position"
                 }).mapIndexed { index, string ->
                     if (index == position) {
                         "* "
@@ -69,5 +73,4 @@ class CompositeMemoize(private vararg val memos: MemoizeProperty<*, *>) {
                         "  "
                     } + string
                 }.joinToString("\n")
-
 }
