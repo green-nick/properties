@@ -8,5 +8,7 @@ interface MemoizeProperty<T, M : MutableProperty<T>> : MutableProperty<T> {
 
     val size: Int
 
+    val history: List<T>
+
     var position: Int
 }

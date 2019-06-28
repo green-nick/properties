@@ -4,10 +4,11 @@ import com.github.greennick.properties.generic.MutableProperty
 
 internal class MemoizePropertyImpl<T, M : MutableProperty<T>>(override val origin: M) : MemoizeProperty<T, M> {
 
-    private val history = mutableListOf(origin.value)
+    private val _history = mutableListOf(origin.value)
     private var onNewSet: () -> Unit = {}
 
-    override val size get() = history.size
+    override val size get() = _history.size
+    override val history get() = _history.toList()
 
     override var position: Int = 0
         set(value) {
@@ -16,14 +17,14 @@ internal class MemoizePropertyImpl<T, M : MutableProperty<T>>(override val origi
             } else if (value == field) {
                 return
             }
-            origin.value = history[value]
+            origin.value = _history[value]
             field = value
         }
 
     override var value: T
         get() = origin.value
         set(value) {
-            history.add(value)
+            _history.add(value)
             position = size - 1
             onNewSet()
         }

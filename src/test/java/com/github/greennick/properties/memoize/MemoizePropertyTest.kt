@@ -81,4 +81,22 @@ class MemoizePropertyTest {
 
         assert(memo.value == lastValue)
     }
+
+    @Test
+    fun `memoize keeps all history`() {
+        val first = "hello"
+        val second = "dratuti"
+        val third = "hola"
+        val fourth = "guten tag"
+
+        val memo = propertyOf(first).memoized
+        memo.value = second
+        memo.value = third
+        memo.value = fourth
+        memo.value = second
+
+        val history = listOf(first, second, third, fourth, second)
+
+        assert(memo.history == history)
+    }
 }
