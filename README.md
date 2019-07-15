@@ -83,12 +83,13 @@ This means that it will be triggered on every new assignment even if new value t
 #### `firePropertyOf`
 Special property that emits value only one time. 
 If there is new subscription, it won't receive updates until new assignment will be done.
+
+**Pay attention**, that there is **only one active subscriber exist**.
+Every new subscription will cancel previous one automatically.
 #### `debouncePropertyOf`
 Only set an item to Property if a particular delay has passed without it setting another item.
 Has a version that uses Java's `SingleThreadScheduledExecutor`, but you can set your own.
 
-**Pay attention**, that there is **only one active subscriber exist**.
-Every new subscription will cancel previous one automatically.
 ### Extensions:
 #### General:
 
@@ -106,13 +107,15 @@ property {
     println("receive [$it]")
 }
 ```
-There is also extension subscription function for nullable properties that receives only non-nullable values:
+There is also extensions for nullable properties:
 ```
-val property = propertyOf<String?>(null)
+val property = propertyOf<String?>("hello")
 
-property.subscribeNonNull { value ->
-    println(value) // value is not null
+property.subscribeNonNull { value: String ->
+    println(value)
 }
+
+property.reset() // set null value
 ```
 #### Mapping:
 You also able to map one property to another:

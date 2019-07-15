@@ -12,6 +12,10 @@ import com.github.greennick.properties.subscriptions.ListenableSubscription
 operator fun <T> Property<T>.invoke(onChanged: (T) -> Unit): ListenableSubscription =
     subscribe(onChanged)
 
+fun <T> MutableProperty<T?>.reset() {
+    value = null
+}
+
 fun <T> Property<T?>.subscribeNonNull(onChanged: (T) -> Unit): ListenableSubscription =
     subscribe { it?.also(onChanged) }
 

@@ -15,4 +15,12 @@ class GeneralExtensionsTest {
 
         assert(calls == 0)
     }
+
+    @Test
+    fun `reset set null to nullable property`() {
+        val prop = emptyProperty("hello")
+        prop.reset()
+
+        assert(prop.value == null)
+    }
 }
