@@ -53,7 +53,7 @@ fun <T> debouncePropertyOf(value: T, delay: Long, executor: Executor): DebounceP
  * Only set an item to Property if a particular delay has passed without it setting another item.
  *
  * @param delay - threshold which has to be passed, before new value will be set.
- * @param context - Updates execution context e.g. some Dispatcher
+ * @param context - Updates execution context e.g. some Dispatcher. Default one is [EmptyCoroutineContext]
  */
 fun <T> CoroutineScope.debouncePropertyOf(
     value: T,
@@ -79,8 +79,4 @@ fun <T> CoroutineScope.debouncePropertyOf(
  * @param executor - ScheduledExecutorService will handle updates scheduling.
  */
 fun <T> debouncePropertyOf(value: T, delay: Long, executor: ScheduledExecutorService): DebounceProperty<T> =
-    debouncePropertyOf(
-        value,
-        delay,
-        JavaExecutor(executor)
-    )
+    debouncePropertyOf(value, delay, JavaExecutor(executor))
