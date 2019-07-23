@@ -37,7 +37,27 @@ internal class DebouncePropertyImpl<T>(
         listeners.forEach { it(value) }
     }
 
-    override fun toString() = "Property of [$value]"
+    override fun toString() = "Debounce property of [$value] with $delay ms delay"
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as DebouncePropertyImpl<*>
+
+        if (delay != other.delay) return false
+        if (executor != other.executor) return false
+        if (_value != other._value) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = delay.hashCode()
+        result = 31 * result + executor.hashCode()
+        result = 31 * result + _value.hashCode()
+        return result
+    }
 
     private class SubscriptionImpl<T>(
         private val propertyImpl: DebouncePropertyImpl<T>,

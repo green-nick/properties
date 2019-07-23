@@ -2,7 +2,7 @@ package com.github.greennick.properties.generic
 
 import com.github.greennick.properties.subscriptions.ListenableSubscription
 
-interface Property<T> {
+interface Property<out T> {
     val value: T
 
     fun subscribe(onChanged: (T) -> Unit): ListenableSubscription

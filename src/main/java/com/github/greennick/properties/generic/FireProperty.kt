@@ -23,7 +23,25 @@ internal class FireProperty<T>(initValue: T) : MutableProperty<T> {
         return SubscriptionImpl(this, onChanged)
     }
 
-    override fun toString() = "Fire property of [$value]"
+    override fun toString() = "Fire property of [$value], consumed: $consumed"
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as FireProperty<*>
+
+        if (consumed != other.consumed) return false
+        if (value != other.value) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = consumed.hashCode()
+        result = 31 * result + value.hashCode()
+        return result
+    }
 
     private class SubscriptionImpl<T>(
         private val propertyImpl: FireProperty<T>,
