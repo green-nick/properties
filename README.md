@@ -89,6 +89,8 @@ Every new subscription will cancel previous one automatically.
 #### `debouncePropertyOf`
 Only set an item to Property if a particular delay has passed without it setting another item.
 Has a version that uses Java's `SingleThreadScheduledExecutor`, but you can set your own.
+Also preferable to use `CoroutineScope`s extended `debounceProperty` which schedule updates 
+on specified scope and context.
 
 ### Extensions:
 #### General:
