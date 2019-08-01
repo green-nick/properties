@@ -115,12 +115,12 @@ fun <T1, T2, T3, T4, T5, R> Property<T1>.zipWith(
  * Boolean extensions section
  */
 
-fun Property<out Boolean?>.subscribeOnTrue(onTrue: () -> Unit): ListenableSubscription =
+fun Property<Boolean?>.subscribeOnTrue(onTrue: () -> Unit): ListenableSubscription =
     subscribe {
         if (it == true) onTrue()
     }
 
-fun Property<out Boolean?>.subscribeOnFalse(onFalse: () -> Unit): ListenableSubscription =
+fun Property<Boolean?>.subscribeOnFalse(onFalse: () -> Unit): ListenableSubscription =
     subscribe {
         if (it == false) onFalse()
     }
