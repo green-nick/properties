@@ -20,7 +20,7 @@ class CompositeMemoize(first: MemoizeProperty<*, *>, vararg memos: MemoizeProper
                     val insertion = history[0]
                     insertion.first.position = insertion.second
                 }
-                field < value -> goToNewer(current = field, new = value)
+                value > field -> goToNewer(current = field, new = value)
                 else -> goToOlder(current = field, old = value)
             }
 

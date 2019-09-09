@@ -12,9 +12,8 @@ internal class MemoizePropertyImpl<T, M : MutableProperty<T>>(override val origi
 
     override var position: Int = 0
         set(value) {
-            if (value < 0 || value >= size) {
-                throw IllegalStateException("Position should be in range 0..size")
-            } else if (value == field) {
+            check(value in 0 until size) { "Position should be in range 0..size" }
+            if (value == field) {
                 return
             }
             origin.value = _history[value]
