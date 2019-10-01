@@ -199,6 +199,63 @@ received true
 received false
 received true
 ```
+### Memoization:
+You able to keep all changes set to property by using `.memoized` extension.  
+It creates wrapper around given property which save all changes and allow to navigate through them:
+```
+val prop = propertyOf("hello").memoized
+prop.size // 1
+prop.position // 0
+prop.history // listOf("hello")
+
+prop.value = "world"
+prop.size // 2
+prop.position // 1
+prop.history // listOf("hello", "world")
+
+prop.position = 0 // navigation through history
+prop.value == "hello"
+```
+There are two extensions for memoized property:
+```
+val prop = propertyOf("hello").memoized
+
+prop.first() // moves position to 0 (init value)
+prop.last() // moves position to latest set value, which is (size - 1)
+```
+If you need you can combine few memoized properties into one unit - `CompositeMemoize`  
+It allows to navigate through all changes done in all inner properties.
+```
+val name = propertyOf("John").memoize
+val age = propertyOf(20).memoize
+val type = propertyOf(User.FREE).memoize
+
+val history = CompositeMemoize(name, age, type)
+
+name.value = "Paul"
+name.value = "Peter"
+age.value = 21
+age.value = 25
+type.value = User.PAID
+
+/**
+ * history
+ * ____________________________________________________
+ * values/position |  0  |  1  |  2  |  3  |  4  |  5  |
+ * ----------------------------------------------------|
+ * name:           |John |Paul |Peter|     |     |     |
+ * ----------------------------------------------------|
+ * age:            | 20  |     |     | 21  | 25  |     |
+ * ----------------------------------------------------|
+ * type:           |FREE |     |     |     |     |PAID |
+ * ----------------------------------------------------|
+ */
+ 
+ history.position = 0 -> name = "John"; age = 20; type = FREE;
+ history.position = 2 -> name = "Peter"; age = 20; type = FREE;
+ history.position = 5 -> name = "Peter"; age = 25; type = PAID;
+ and etc.
+```
 
 Also you can find additional usage examples in the unit-tests [package](https://github.com/green-nick/properties/tree/master/src/test/java/com/github/greennick/properties)
 
