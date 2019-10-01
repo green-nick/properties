@@ -1,7 +1,9 @@
 package com.github.greennick.properties.subscriptions
 
+import java.util.concurrent.CopyOnWriteArrayList
+
 class CompositeSubscription : Subscription {
-    private val subscriptions = mutableListOf<Subscription>()
+    private val subscriptions = CopyOnWriteArrayList<Subscription>()
     private var _subscribed = true
 
     override val subscribed get() = _subscribed
@@ -14,12 +16,8 @@ class CompositeSubscription : Subscription {
     }
 
     fun clear() {
-        val iterator = subscriptions.iterator()
-        while (iterator.hasNext()) {
-            val subscription = iterator.next()
-            subscription.unsubscribe()
-            iterator.remove()
-        }
+        subscriptions.forEach(Subscription::unsubscribe)
+        subscriptions.clear()
     }
 
     fun add(vararg subscriptions: Subscription) {

@@ -1,13 +1,14 @@
 package com.github.greennick.properties.debounce
 
 import com.github.greennick.properties.subscriptions.ListenableSubscription
+import java.util.concurrent.CopyOnWriteArraySet
 
 internal class DebouncePropertyImpl<T>(
     private val delay: Long,
     private val executor: Executor,
     initValue: T
 ) : DebounceProperty<T> {
-    private val listeners = linkedSetOf<(T) -> Unit>()
+    private val listeners = CopyOnWriteArraySet<(T) -> Unit>()
     private var previousUpdate: Cancellable? = null
 
     @Volatile

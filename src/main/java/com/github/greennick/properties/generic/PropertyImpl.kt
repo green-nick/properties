@@ -1,9 +1,10 @@
 package com.github.greennick.properties.generic
 
 import com.github.greennick.properties.subscriptions.ListenableSubscription
+import java.util.concurrent.CopyOnWriteArraySet
 
 internal class PropertyImpl<T>(initValue: T) : MutableProperty<T> {
-    private val listeners = linkedSetOf<(T) -> Unit>()
+    private val listeners = CopyOnWriteArraySet<(T) -> Unit>()
 
     override var value = initValue
         set(value) {
