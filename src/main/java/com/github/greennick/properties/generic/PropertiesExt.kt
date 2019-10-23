@@ -54,6 +54,19 @@ fun <T, R> Property<T>.map(mapper: (T) -> R): MutableProperty<R> {
     return new
 }
 
+fun <T, R> Property<T?>.mapNotNull(default: R, mapper: (T) -> R): MutableProperty<R> {
+    val init = this.value
+    val new = if (init == null) {
+        propertyOf(default)
+    } else {
+        propertyOf(mapper(init))
+    }
+
+    this.subscribe { new.value = mapper(it ?: return@subscribe) }
+
+    return new
+}
+
 fun <T1, T2, E> Property<T1>.zipWith(another: Property<T2>, zipper: (T1, T2) -> E): MutableProperty<E> {
     val new = propertyOf(zipper(this.value, another.value))
 
