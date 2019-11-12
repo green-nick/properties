@@ -1,4 +1,6 @@
 [![](https://jitpack.io/v/green-nick/properties.svg)](https://jitpack.io/#green-nick/properties)
+[![](https://jitci.com/gh/green-nick/properties/svg)](https://jitci.com/gh/green-nick/properties)
+
 # Properties
 Small, lightweight library that allows to use observable properties.  
 Written in pure Kotlin, without third-party dependencies, Kotlin oriented.  
