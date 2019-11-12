@@ -127,6 +127,18 @@ val property = propertyOf("Hello")
 val length: MutableProperty<Int> = property.map { it.length } // will contain 5
 ```
 Also notice that mapped value will be triggered on all updates of origin one.
+
+Besides that, there is mapper for nullable properties:
+```
+val origin = propertyOf<String?>(null)
+
+val length: MutableProperty<Int> = property.mapNotNull(0) { it.length } // will contain 0
+
+origin.value = "hello"
+length.value == 5
+```
+If init value of origin property is `null`, default value will be used for initialization.  
+All non-null set values will be mapped.
 #### Addition:
 You can add two different properties and get new one and receive all updates pushed to origins as Pair of their values:
 ```
