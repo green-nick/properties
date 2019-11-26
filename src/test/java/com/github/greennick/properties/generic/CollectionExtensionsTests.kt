@@ -100,6 +100,50 @@ class CollectionExtensionsTests {
     }
 
     @Test
+    fun `plusAssign adds new element to property of Set`() {
+        val strings = setOf("Hello", "Dratuti", "Aloha")
+        val property = propertyOf(strings)
+        val another = "Guten tag"
+
+        property += another
+
+        assert(another in property)
+    }
+
+    @Test
+    fun `plusAssign adds new elements to property of Set`() {
+        val strings = setOf("Hello", "Dratuti", "Aloha")
+        val property = propertyOf(strings)
+        val another = listOf("Guten tag", "Privit")
+
+        property += another
+
+        assert(another in property)
+    }
+
+    @Test
+    fun `minusAssign removes exist element from property of Set`() {
+        val strings = setOf("Hello", "Dratuti", "Aloha")
+        val property = propertyOf(strings)
+        val removed = strings.first()
+
+        property -= removed
+
+        assert(removed !in property)
+    }
+
+    @Test
+    fun `minusAssign removes exist elements from property of Set`() {
+        val strings = setOf("Hello", "Dratuti", "Aloha")
+        val property = propertyOf(strings)
+        val removed = setOf("Hello", "Dratuti")
+
+        property -= removed
+
+        assert(removed !in property)
+    }
+
+    @Test
     fun `plusAssign adds new entry to map property`() {
         val entries = mapOf(0 to "Hello")
         val property = propertyOf(entries)
