@@ -19,10 +19,7 @@ fun <T> MutableProperty<T?>.reset() {
 fun <T> Property<T?>.subscribeNonNull(onChanged: (T) -> Unit): ListenableSubscription =
     subscribe { it?.also(onChanged) }
 
-val <T> MutableProperty<T>.memoized: MemoizeProperty<T, MutableProperty<T>>
-    get() = MemoizePropertyImpl(this)
-
-val <T> DebounceProperty<T>.memoized: MemoizeProperty<T, DebounceProperty<T>>
+val <T, P : MutableProperty<T>> P.memoized: MemoizeProperty<T, P>
     get() = MemoizePropertyImpl(this)
 
 fun MemoizeProperty<*, *>.first() {
