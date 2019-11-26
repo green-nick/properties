@@ -1,6 +1,7 @@
 package com.github.greennick.properties.generic
 
 import com.github.greennick.properties.subscriptions.ListenableSubscription
+import com.github.greennick.properties.subscriptions.SubscriptionImpl
 import java.util.concurrent.CopyOnWriteArraySet
 
 internal class TriggeredProperty<T>(initValue: T) : MutableProperty<T> {
@@ -15,7 +16,7 @@ internal class TriggeredProperty<T>(initValue: T) : MutableProperty<T> {
     override fun subscribe(onChanged: (T) -> Unit): ListenableSubscription {
         listeners += onChanged
         onChanged(value)
-        return SubscriptionImpl(this, onChanged)
+        return SubscriptionImpl(listeners, onChanged)
     }
 
     override fun toString() = "Trigger property of [$value]"
@@ -32,25 +33,4 @@ internal class TriggeredProperty<T>(initValue: T) : MutableProperty<T> {
     }
 
     override fun hashCode() = value.hashCode()
-
-    private class SubscriptionImpl<T>(
-        private val propertyImpl: TriggeredProperty<T>,
-        private val action: (T) -> Unit
-    ) : ListenableSubscription {
-        private var onUnsubscribe: (() -> Unit)? = null
-
-        override val subscribed get() = action in propertyImpl.listeners
-
-        override fun unsubscribe() {
-            if (!subscribed) return
-
-            if (propertyImpl.listeners.remove(action)) {
-                onUnsubscribe?.invoke()
-            }
-        }
-
-        override fun onUnsubscribe(action: () -> Unit) {
-            onUnsubscribe = action
-        }
-    }
 }
