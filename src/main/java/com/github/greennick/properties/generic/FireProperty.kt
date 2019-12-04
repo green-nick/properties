@@ -20,7 +20,7 @@ internal class FireProperty<T>(initValue: T) : MutableProperty<T> {
             onChanged(value)
             consumed = true
         }
-        return SubscriptionImpl(this, onChanged)
+        return FireSubscriptionImpl(this, onChanged)
     }
 
     override fun toString() = "Fire property of [$value], consumed: $consumed"
@@ -43,7 +43,7 @@ internal class FireProperty<T>(initValue: T) : MutableProperty<T> {
         return result
     }
 
-    private class SubscriptionImpl<T>(
+    private class FireSubscriptionImpl<T>(
         private val propertyImpl: FireProperty<T>,
         private val action: (T) -> Unit
     ) : ListenableSubscription {

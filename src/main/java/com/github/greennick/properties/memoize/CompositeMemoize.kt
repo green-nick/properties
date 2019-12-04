@@ -6,6 +6,8 @@ class CompositeMemoize(first: MemoizeProperty<*, *>, vararg memos: MemoizeProper
     private val history = mutableListOf<Pair<MemoizeProperty<*, *>, Int>>()
     private val initPositions = _memos.map { it.position }
 
+    var onUpdate: () -> Unit = {}
+
     val size: Int get() = history.size + 1
 
     var position: Int = 0
@@ -37,6 +39,7 @@ class CompositeMemoize(first: MemoizeProperty<*, *>, vararg memos: MemoizeProper
 
                     history.add(memo to memo.position)
                     position = size - 1
+                    onUpdate()
                 }
             }
     }

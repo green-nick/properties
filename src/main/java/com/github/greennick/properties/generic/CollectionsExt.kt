@@ -37,6 +37,30 @@ operator fun <T> MutableProperty<List<T>>.minusAssign(another: Iterable<T>) {
 operator fun <T> Property<List<T>>.get(index: Int): T = value[index]
 
 /**
+ * Set extensions
+ */
+
+@JvmName("addToPropertyOfSet")
+operator fun <T> MutableProperty<Set<T>>.plusAssign(element: T) {
+    value = value + element
+}
+
+@JvmName("addToPropertyOfSet")
+operator fun <T> MutableProperty<Set<T>>.plusAssign(another: Iterable<T>) {
+    value = value + another
+}
+
+@JvmName("removeFromPropertyOfSet")
+operator fun <T> MutableProperty<Set<T>>.minusAssign(element: T) {
+    value = value - element
+}
+
+@JvmName("removeFromPropertyOfSet")
+operator fun <T> MutableProperty<Set<T>>.minusAssign(another: Iterable<T>) {
+    value = value - another
+}
+
+/**
  * Map extensions
  */
 

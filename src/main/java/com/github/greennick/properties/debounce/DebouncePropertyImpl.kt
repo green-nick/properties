@@ -1,6 +1,7 @@
 package com.github.greennick.properties.debounce
 
 import com.github.greennick.properties.subscriptions.ListenableSubscription
+import com.github.greennick.properties.subscriptions.SubscriptionImpl
 import java.util.concurrent.CopyOnWriteArraySet
 
 internal class DebouncePropertyImpl<T>(
@@ -28,7 +29,7 @@ internal class DebouncePropertyImpl<T>(
     override fun subscribe(onChanged: (T) -> Unit): ListenableSubscription {
         listeners += onChanged
         onChanged(value)
-        return SubscriptionImpl(this, onChanged)
+        return SubscriptionImpl(listeners, onChanged)
     }
 
     override fun forceSet(value: T) {
@@ -58,26 +59,5 @@ internal class DebouncePropertyImpl<T>(
         result = 31 * result + executor.hashCode()
         result = 31 * result + _value.hashCode()
         return result
-    }
-
-    private class SubscriptionImpl<T>(
-        private val propertyImpl: DebouncePropertyImpl<T>,
-        private val action: (T) -> Unit
-    ) : ListenableSubscription {
-        private var onUnsubscribe: (() -> Unit)? = null
-
-        override val subscribed get() = action in propertyImpl.listeners
-
-        override fun unsubscribe() {
-            if (!subscribed) return
-
-            if (propertyImpl.listeners.remove(action)) {
-                onUnsubscribe?.invoke()
-            }
-        }
-
-        override fun onUnsubscribe(action: () -> Unit) {
-            onUnsubscribe = action
-        }
     }
 }
