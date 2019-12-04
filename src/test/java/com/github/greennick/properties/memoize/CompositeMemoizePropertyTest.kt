@@ -1,10 +1,29 @@
 package com.github.greennick.properties.memoize
 
+import com.github.greennick.properties.firePropertyOf
 import com.github.greennick.properties.generic.memoized
 import com.github.greennick.properties.propertyOf
+import com.github.greennick.properties.triggerPropertyOf
 import org.junit.Test
 
 class CompositeMemoizePropertyTest {
+
+    @Test
+    fun `composite sends updates`() {
+        val prop1 = propertyOf("zero").memoized
+        val prop2 = firePropertyOf(20).memoized
+        val prop3 = triggerPropertyOf(30L).memoized
+
+        val composite = CompositeMemoize(prop1, prop2, prop3)
+        var called = false
+        composite.onUpdate = { called = true }
+        assert(!called)
+
+        prop1.value = "hero"
+        prop2.value = 53
+
+        assert(called)
+    }
 
     @Test
     fun `composite represents single property changes`() {

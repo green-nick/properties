@@ -1,6 +1,6 @@
 package com.github.greennick.properties.subscriptions
 
-class SubscriptionImpl<T>(
+internal class SubscriptionImpl<T>(
     private val listeners: MutableCollection<(T) -> Unit>,
     private val action: (T) -> Unit
 ): ListenableSubscription {
