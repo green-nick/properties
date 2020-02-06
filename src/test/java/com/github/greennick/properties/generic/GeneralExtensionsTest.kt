@@ -38,7 +38,7 @@ class GeneralExtensionsTest {
         val collected = mutableListOf<String>()
         filteredProp.subscribe { it?.apply { collected.add(this) } }
 
-        input.forEach { prop.value = it }
+        input.forEach(prop::set)
 
         assert(collected == filtered)
     }
