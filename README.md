@@ -277,25 +277,20 @@ name.value = "Peter"
 age.value = 21
 age.value = 25
 type.value = User.PAID
-
-/**
- * history
- * ____________________________________________________
- * values/position |  0  |  1  |  2  |  3  |  4  |  5  |
- * ----------------------------------------------------|
- * name:           |John |Paul |Peter|     |     |     |
- * ----------------------------------------------------|
- * age:            | 20  |     |     | 21  | 25  |     |
- * ----------------------------------------------------|
- * type:           |FREE |     |     |     |     |PAID |
- * ----------------------------------------------------|
- */
  
- history.position = 0 -> name = "John"; age = 20; type = FREE;
- history.position = 2 -> name = "Peter"; age = 20; type = FREE;
- history.position = 5 -> name = "Peter"; age = 25; type = PAID;
- and etc.
+// history.position = 0 -> name = "John"; age = 20; type = FREE;
+// history.position = 2 -> name = "Peter"; age = 20; type = FREE;
+// history.position = 5 -> name = "Peter"; age = 25; type = PAID;
+// and etc.
 ```
+
+Changes of `history`:
+
+value/position |  0  |  1  |  2  |  3  |  4  |  5
+-------------|-----|-----|-----|-----|-----|---
+name: |John | Paul | Peter
+age: | 20 | | | 21 | 25
+type: | FREE | | | | |PAID
 
 Also you can find additional usage examples in the unit-tests [package](https://github.com/green-nick/properties/tree/master/src/test/java/com/github/greennick/properties)
 
