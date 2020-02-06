@@ -1,6 +1,5 @@
 package com.github.greennick.properties.generic
 
-import com.github.greennick.properties.debounce.DebounceProperty
 import com.github.greennick.properties.memoize.MemoizeProperty
 import com.github.greennick.properties.memoize.MemoizePropertyImpl
 import com.github.greennick.properties.propertyOf
@@ -18,6 +17,18 @@ fun <T> MutableProperty<T?>.reset() {
 
 fun <T> Property<T?>.subscribeNonNull(onChanged: (T) -> Unit): ListenableSubscription =
     subscribe { it?.also(onChanged) }
+
+fun <T> Property<T>.filter(default: T, predicate: (T) -> Boolean): MutableProperty<T> {
+    val new = propertyOf(if (predicate(this.value)) this.value else default)
+
+    this.subscribe {
+        if (predicate(it)) new.value = it
+    }
+    return new
+}
+
+fun <T> Property<T>.filter(predicate: (T) -> Boolean): MutableProperty<T?> =
+    this.filter(null) { it?.let(predicate) ?: false }
 
 val <T, P : MutableProperty<T>> P.memoized: MemoizeProperty<T, P>
     get() = MemoizePropertyImpl(this)
