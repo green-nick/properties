@@ -141,6 +141,32 @@ length.value == 5
 ```
 If init value of origin property is `null`, default value will be used for initialization.  
 All non-null set values will be mapped.
+#### Filtering:
+You can filter values from one Property to another:
+```
+val property = propertyOf("Hello")
+
+val filtered: MutableProperty<String?> = property.filter { it.length <= 5 }
+filtered.value == "Hello"
+
+property.value = "world"
+filtered.value == "world"
+
+property.value = "eleven"
+filtered.value == "world"
+```
+Also notice that filtered Property will be triggered on all suitable updates of origin one.
+
+By default, `.filter` produces nullable Properties. To prevent that, you can set default value, 
+which will be used in case, if current value of origin Property didn't pass the filter :
+```
+val property = propertyOf("Hello")
+
+val filtered: MutableProperty<String> = property.filter("verylongword") { it.length >= 10 } // will contain "verylongword"
+
+origin.value = "anotherverylongword"
+filtered.value == "anotherverylongword"
+```
 #### Addition:
 You can add two different properties and get new one and receive all updates pushed to origins as Pair of their values:
 ```
