@@ -8,6 +8,8 @@ The difference from Kotlin's delegate `observable` is that you able to add liste
 
 Could be useful in MVVM patterns, when you need to bind `Views` and `ViewModels`.
 
+Usage in real project: [Karbon](https://gitlab.com/greennick/karbon)
+
 ## Usage examples:
 ### Initialization:
 Create non-null mutable property with default value:
