@@ -61,4 +61,26 @@ class GeneralExtensionsTest {
 
         assert(filteredProp.value == "hello")
     }
+
+    @Test
+    fun `filterNotNull set default as init value on empty property`() {
+        val nullProp = emptyProperty<String>()
+        val filtered = nullProp.filterNotNull { "hello" }
+
+        assert(filtered.value == "hello")
+    }
+
+    @Test
+    fun `filterNotNull filters null values`() {
+        val nullProp = emptyProperty("hello")
+        val filtered = nullProp.filterNotNull("world")
+
+        assert(filtered.value == "hello")
+
+        nullProp.value = null
+        assert(filtered.value == "hello")
+
+        nullProp.value = "world"
+        assert(filtered.value == "world")
+    }
 }

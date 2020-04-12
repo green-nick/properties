@@ -30,6 +30,17 @@ fun <T> Property<T>.filter(default: T, predicate: (T) -> Boolean): MutableProper
 fun <T> Property<T>.filter(predicate: (T) -> Boolean): MutableProperty<T?> =
     this.filter(null) { it?.let(predicate) ?: false }
 
+inline fun <T : Any> Property<T?>.filterNotNull(default: () -> T): MutableProperty<T> {
+    val new = propertyOf(this.value ?: default())
+
+    this.subscribe { new.value = it ?: return@subscribe }
+
+    return new
+}
+
+fun <T : Any> Property<T?>.filterNotNull(default: T): MutableProperty<T> =
+    filterNotNull { default }
+
 val <T, P : MutableProperty<T>> P.memoized: MemoizeProperty<T, P>
     get() = MemoizePropertyImpl(this)
 
