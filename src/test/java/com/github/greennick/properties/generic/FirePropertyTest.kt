@@ -1,42 +1,38 @@
 package com.github.greennick.properties.generic
 
 import com.github.greennick.properties.firePropertyOf
+import com.github.greennick.properties.testable
 import org.junit.Test
 
 class FirePropertyTest {
 
     @Test
     fun `listener triggered only once`() {
-        var calls = 0
-        val property = firePropertyOf("Hello")
-        property.subscribe { calls++ }
-        property.subscribe { calls++ }
+        val property = firePropertyOf("Hello").testable()
+        property.subscribe {}
+        property.subscribe {}
 
-        assert(calls == 1)
+        assert(property.changedCount == 1)
     }
 
     @Test
     fun `listener triggered after new assignment`() {
-        var calls = 0
-        val property = firePropertyOf("Hello")
-        property.subscribe { calls++ }
+        val property = firePropertyOf("Hello").testable()
+        property.subscribe {}
         property.value = "new"
 
-        assert(calls == 2)
+        assert(property.changedCount == 2)
     }
 
     @Test
     fun `listener triggered on equal values assignment`() {
         val initValue = "Hello"
-        val property = firePropertyOf(initValue)
+        val property = firePropertyOf(initValue).testable()
 
-        var calls = 0
-
-        property.subscribe {
-            calls++
-        }
+        property.subscribe {}
         property.value = initValue
-        assert(calls == 2)
+
+        assert(property.changedCount == 2)
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.github.greennick.properties.generic
 
+import com.github.greennick.properties.testable
 import com.github.greennick.properties.triggerPropertyOf
 import org.junit.Test
 
@@ -8,14 +9,13 @@ class TriggeredPropertiesTest {
     @Test
     fun `count calls with equal values`() {
         val initValue = "Hello"
-        val property = triggerPropertyOf(initValue)
+        val property = triggerPropertyOf(initValue).testable()
 
-        var calls = 0
-
-        property.subscribe {
-            calls++
-        }
+        property.subscribe {}
         property.value = initValue
-        assert(calls == 2)
+        property.value = initValue
+        property.value = initValue
+
+        assert(property.changedCount == 4)
     }
 }

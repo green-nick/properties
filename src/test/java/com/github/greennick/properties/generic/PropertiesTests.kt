@@ -1,6 +1,7 @@
 package com.github.greennick.properties.generic
 
 import com.github.greennick.properties.propertyOf
+import com.github.greennick.properties.testable
 import org.junit.Test
 
 class PropertiesTests {
@@ -74,12 +75,11 @@ class PropertiesTests {
 
     @Test
     fun `skip calls with equivalent sets`() {
-        var counter = 0
         val init = "Hello"
-        val property = propertyOf(init)
-        property.subscribe { counter++ }
+        val property = propertyOf(init).testable()
+        property.subscribe {}
         property.value = init
 
-        assert(counter == 1)
+        assert(property.changedCount == 1)
     }
 }
