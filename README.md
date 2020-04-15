@@ -6,7 +6,7 @@ Small, lightweight library that allows to use observable properties.
 Written in pure Kotlin, without third-party dependencies, Kotlin oriented.  
 The difference from Kotlin's delegate `observable` is that you able to add listeners at any moment instead of only in initialization.
 
-Could be useful in MVVM patterns, when you need to bind `Views` and `ViewModels`.
+Could be useful in MVVM patterns, when you need to bind Views and ViewModels.
 
 ## Usage examples:
 ### Initialization:
@@ -20,22 +20,22 @@ Assignment new value to the property (also will update active observers):
 `property.value = "this string will be assigned and pushed to all observers"`
 
 Notice, that you able to change value of mutable property only!
-```
+```kotlin
 val mutable: MutableProperty<String> = propertyOf("Hello!")
 mutable.value = "world!" // this works
 
 val immutable: Property<String> = mutable
-immutable.value = "or not" // but this doesn't
+immutable.value = "or not" // doesn't compile
 ```
 
 Reading current value from the property:
-```
+```kotlin
 val property = propertyOf("Hello")
-val currentValue = property.value // currentValue will get "Hello"
+val currentValue: String = property.value // currentValue will get "Hello"
 ```
 ### Listening to changes:
 After subscribing on property, you will receive current value immediately:
-```
+```kotlin
 val property = propertyOf("Hello")
 
 property.subscribe {
@@ -52,7 +52,7 @@ receive [world!]
 ```
 
 Also you able to handle lifecycle of subscriptions and unsubscribe when you don't want receive any updates anymore:
-```
+```kotlin
 val property = propertyOf("Hello")
 
 val subscription: Subscription = property.subscribe {
@@ -75,7 +75,7 @@ receive [world!]
 #### `propertyOf`
 Default one. Allows to read and assign values and listen its changes.
 Does equality check when new value is being assigned.
-So if new value is the same as previous one - change listener won't be triggered.
+So if new value is the same as previous one - subscribers won't be triggered.
 #### `emptyProperty`
 Just another initializer of `propertyOf`.
 Allows not to set init value and final type will be nullable anyway.
@@ -83,22 +83,22 @@ Allows not to set init value and final type will be nullable anyway.
 Unlike `propertyOf`, this property doesn't use equality check at all.
 This means that it will be triggered on every new assignment even if new value the same as previous one.
 #### `firePropertyOf`
-Special property that emits value only one time. 
+Special property that emits value only once. 
 If there is new subscription, it won't receive updates until new assignment will be done.
 
-**Pay attention**, that there is **only one active subscriber exist**.
+**Pay attention**, that there is **only one active subscriber can exists**.
 Every new subscription will cancel previous one automatically.
 #### `debouncePropertyOf`
 Only set an item to Property if a particular delay has passed without it setting another item.
 Has a version that uses Java's `SingleThreadScheduledExecutor`, but you can set your own.
-Also preferable to use `CoroutineScope`s extended `debounceProperty` which schedule updates 
+Also preferable to use `CoroutineScope`s extended `debouncePropertyOf` which schedule updates 
 on specified scope and context.
 
 ### Extensions:
 #### General:
 
 You can use invoke call for subscribing instead of `subscribe`:
-```
+```kotlin
 val property = propertyOf("Hello")
 
 property.invoke {
@@ -106,13 +106,13 @@ property.invoke {
 }
 ```
 or simplified form:
-```
+```kotlin
 property {
     println("receive [$it]")
 }
 ```
 There is also extensions for nullable properties:
-```
+```kotlin
 val property = propertyOf<String?>("hello")
 
 property.subscribeNonNull { value: String ->
@@ -123,18 +123,18 @@ property.reset() // set null value
 ```
 #### Mapping:
 You also able to map one property to another:
-```
+```kotlin
 val property = propertyOf("Hello")
 
 val length: MutableProperty<Int> = property.map { it.length } // will contain 5
 ```
 Also notice that mapped value will be triggered on all updates of origin one.
 
-Besides that, there is mapper for nullable properties:
-```
+Besides that, there is mapper that can filter nullable output:
+```kotlin
 val origin = propertyOf<String?>(null)
 
-val length: MutableProperty<Int> = property.mapNotNull(0) { it.length } // will contain 0
+val length: MutableProperty<Int> = origin.mapNotNull(0) { it.length } // will contain 0
 
 origin.value = "hello"
 length.value == 5
@@ -143,7 +143,7 @@ If init value of origin property is `null`, default value will be used for initi
 All non-null set values will be mapped.
 #### Filtering:
 You can filter values from one Property to another:
-```
+```kotlin
 val property = propertyOf("Hello")
 
 val filtered: MutableProperty<String?> = property.filter { it.length <= 5 }
@@ -159,7 +159,7 @@ Also notice that filtered Property will be triggered on all suitable updates of 
 
 By default, `.filter` produces nullable Properties. To prevent that, you can set default value, 
 which will be used in case, if current value of origin Property didn't pass the filter :
-```
+```kotlin
 val property = propertyOf("Hello")
 
 val filtered: MutableProperty<String> = property.filter("verylongword") { it.length >= 10 } // will contain "verylongword"
@@ -169,7 +169,7 @@ filtered.value == "anotherverylongword"
 ```
 #### Addition:
 You can add two different properties and get new one and receive all updates pushed to origins as Pair of their values:
-```
+```kotlin
 val hi = propertyOf("Hello")
 val person = propertyOf("world")
 
@@ -182,8 +182,8 @@ hi.value = "Aloha" // prints "Aloha, world!"
 person.value = "Github" // prints "Aloha, Github!"
 ```
 #### Zipping:
-Similar to Addition, but allows you to convert output into single object instead of Pair:
-```
+Similar to Addition, but allows you to map output into any object instead of Pair:
+```kotlin
 val hi = propertyOf("Hello")
 val person = propertyOf("world")
 
@@ -197,12 +197,13 @@ greeting.subscribe {
 hi.value = "Aloha" // prints "Aloha, world!"
 person.value = "Github" // prints "Aloha, Github!"
 ```
+`zipWith` allows to combine up to 5 different properties as input.
 #### Booleans:
 There are few extension for Properties that holds boolean value.
 
 First one is `toggle`. It allows to invert value stored in property. 
 Could be called only on `MutableProperty<Boolean>`
-```
+```kotlin
 val property: MutableProperty<Boolean> = propertyOf(true)
 val currentValue = property.value // true
 
@@ -211,7 +212,7 @@ val newValue = property.value // false
 ```
 
 Second one is logical `not` operator. It creates new property with inverted value of parent's:
-```
+```kotlin
 val property: MutableProperty<Boolean> = propertyOf(true)
 val inverted = !property
 
@@ -224,7 +225,7 @@ println(inverted.value) // true
 Beside that, there are two additional extensions: `subscribeOnTrue` and `subscribeOnFalse`.
 
 Callback will be triggered only if correspond value will be set into property:
-```
+```kotlin
 val property = propertyOf(true)
 
 property.subscribeOnTrue { println("received true") }
@@ -241,8 +242,8 @@ received true
 ```
 ### Memoization:
 You able to keep all changes set to property by using `.memoized` extension.  
-It creates wrapper around given property which save all changes and allow to navigate through them:
-```
+It creates wrapper around given property which save all changes and allows to navigate through them:
+```kotlin
 val prop = propertyOf("hello").memoized
 prop.size // 1
 prop.position // 0
@@ -257,7 +258,7 @@ prop.position = 0 // navigation through history
 prop.value == "hello"
 ```
 There are two extensions for memoized property:
-```
+```kotlin
 val prop = propertyOf("hello").memoized
 
 prop.first() // moves position to 0 (init value)
@@ -265,7 +266,7 @@ prop.last() // moves position to latest set value, which is (size - 1)
 ```
 If you need you can combine few memoized properties into one unit - `CompositeMemoize`  
 It allows to navigate through all changes done in all inner properties.
-```
+```kotlin
 val name = propertyOf("John").memoize
 val age = propertyOf(20).memoize
 val type = propertyOf(User.FREE).memoize
